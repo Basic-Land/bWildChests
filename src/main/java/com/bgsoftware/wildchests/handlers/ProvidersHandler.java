@@ -1,25 +1,14 @@
 package com.bgsoftware.wildchests.handlers;
-import com.bgsoftware.wildchests.api.handlers.ProvidersManager;
-import com.bgsoftware.wildchests.hooks.ChestShopHook;
-import com.bgsoftware.wildchests.hooks.PricesProvider_QuantumShop;
-import com.bgsoftware.wildchests.hooks.PricesProvider_ShopGUIPlus;
-import com.bgsoftware.wildchests.hooks.PricesProvider_zShop;
-import com.bgsoftware.wildchests.hooks.SuperiorSkyblockHook;
-import com.bgsoftware.wildchests.utils.Executor;
-import net.brcdev.shopgui.player.PlayerData;
-import net.brcdev.shopgui.shop.Shop;
-import net.brcdev.shopgui.shop.ShopItem;
-import net.milkbowl.vault.economy.Economy;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.bgsoftware.wildchests.WildChestsPlugin;
+import com.bgsoftware.wildchests.api.handlers.ProvidersManager;
 import com.bgsoftware.wildchests.api.hooks.PricesProvider;
-import com.bgsoftware.wildchests.hooks.PricesProvider_Default;
-import com.bgsoftware.wildchests.hooks.PricesProvider_Essentials;
+import com.bgsoftware.wildchests.hooks.*;
+import com.bgsoftware.wildchests.utils.Executor;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.HashMap;
@@ -40,22 +29,6 @@ public final class ProvidersHandler implements ProvidersManager {
         Executor.sync(() -> {
             if(pricesProvider instanceof PricesProvider_Default) {
                 switch (plugin.getSettings().pricesProvider.toUpperCase()) {
-                    case "SHOPGUIPLUS":
-                        if (Bukkit.getPluginManager().isPluginEnabled("ShopGUIPlus")) {
-                            try {
-                                //noinspection JavaReflectionMemberAccess
-                                ShopItem.class.getMethod("getSellPriceForAmount", Shop.class, Player.class, PlayerData.class, int.class);
-                                pricesProvider = (PricesProvider) Class.forName("com.bgsoftware.wildchests.hooks.PricesProvider_ShopGUIPlusOld").newInstance();
-                            } catch (Throwable ex) {
-                                pricesProvider = new PricesProvider_ShopGUIPlus();
-                            }
-                            break;
-                        }
-                    case "QUANTUMSHOP":
-                        if (Bukkit.getPluginManager().isPluginEnabled("QuantumShop")) {
-                            pricesProvider = new PricesProvider_QuantumShop();
-                            break;
-                        }
                     case "ESSENTIALS":
                         if (Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
                             pricesProvider = new PricesProvider_Essentials();

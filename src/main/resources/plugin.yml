@@ -1,10 +1,10 @@
-name: WildChests
+name: bWildChests
 version: ${project.version}
 api-version: 1.13
 main: com.bgsoftware.wildchests.WildChestsPlugin
 description: Sell wildchests, auto-crafters, pouches and more in one plugin!
 website: https://bg-software.com/
-author: Ome_R
+author: Ome_R, Firestone82
 softdepend: [Essentials, ShopGUIPlus, Vault]
 commands:
   chests:

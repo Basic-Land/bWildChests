@@ -1,5 +1,6 @@
 package com.bgsoftware.wildchests.command.commands;
 
+import cz.devfire.bantidupe.AntiDupe;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -72,7 +73,7 @@ public final class CommandGive implements ICommand {
             }
         }
 
-        ItemUtils.addItem(chestItem, target.getInventory(), target.getLocation());
+        ItemUtils.addItem(AntiDupe.getApi().saveItem(chestItem), target.getInventory(), target.getLocation());
         Locale.CHEST_GIVE_PLAYER.send(sender, target.getName(), chestItem.getAmount(), chestData.getName(), chestItem.getItemMeta().getDisplayName());
         Locale.CHEST_RECIEVE.send(target, chestItem.getAmount(), chestData.getName(), sender.getName(), chestItem.getItemMeta().getDisplayName());
     }

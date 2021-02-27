@@ -5,6 +5,9 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.utils.ItemUtils;
+import cz.devfire.bantidupe.AntiDupe;
+import cz.devfire.bantidupe.AntiDupeAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -59,6 +62,20 @@ public final class BlockListener implements Listener {
             return;
         }
 
+        if (Bukkit.getPluginManager().isPluginEnabled("bAntiDupe")) {
+            AntiDupeAPI api = AntiDupe.getApi();
+
+            if (api.isDuped(e.getPlayer().getItemInHand())) {
+                api.warnPlayer(e.getPlayer());
+                api.removeItem(e.getPlayer().getItemInHand());
+                e.getPlayer().getInventory().remove(e.getPlayer().getItemInHand());
+                e.setCancelled(true);
+                return;
+            }
+
+            api.removeItem(e.getPlayer().getItemInHand(),false,false);
+        }
+
         Chest chest = plugin.getChestsManager().addChest(e.getPlayer().getUniqueId(), e.getBlockPlaced().getLocation(), chestData);
 
         //chest.onPlace(e);
@@ -77,7 +94,7 @@ public final class BlockListener implements Listener {
 
         if(e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             ChestData chestData = chest.getData();
-            ItemUtils.dropOrCollect(e.getPlayer(), chestData.getItemStack(), chestData.isAutoCollect(), chest.getLocation());
+            ItemUtils.dropOrCollect(e.getPlayer(),AntiDupe.getApi().saveItem(chestData.getItemStack()), chestData.isAutoCollect(), chest.getLocation());
         }
 
         chest.onBreak(e);

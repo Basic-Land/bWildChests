@@ -138,6 +138,8 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
     private boolean loadNMSAdapter(){
         String version = getServer().getClass().getPackage().getName().split("\\.")[3];
         try {
+            System.out.println("com.bgsoftware.wildchests.nms.NMSAdapter_" + version);
+
             nmsAdapter = (NMSAdapter) Class.forName("com.bgsoftware.wildchests.nms.NMSAdapter_" + version).newInstance();
             nmsInventory = (NMSInventory) Class.forName("com.bgsoftware.wildchests.nms.NMSInventory_" + version).newInstance();
             return true;
