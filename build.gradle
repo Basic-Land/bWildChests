@@ -58,9 +58,9 @@ dependencies {
     implementation 'com.bgsoftware.common.mappings:MappingsChecker:1.0.0'
 
     // Spigot jars
-    compileOnly 'org.spigotmc:v1_8_R1:latest'
     compileOnly 'org.spigotmc:v1_16_R3-Tuinity:latest'
-    compileOnly 'cz.basicland:bantidupe:2.0.5'
+    compileOnly 'cz.basicland:bantidupe:2.0.6'
+    compileOnly 'cz.devfire:bantidupe:1.5'
 }
 
 jar {
