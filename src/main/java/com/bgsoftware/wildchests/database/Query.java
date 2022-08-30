@@ -21,11 +21,11 @@ public enum Query {
         this.query = query;
     }
 
-    public String getStatement(){
+    public String getStatement() {
         return query;
     }
 
-    public StatementHolder getStatementHolder(DatabaseObject databaseObject){
+    public StatementHolder getStatementHolder(DatabaseObject databaseObject) {
         return new StatementHolder(databaseObject, this);
     }
 }

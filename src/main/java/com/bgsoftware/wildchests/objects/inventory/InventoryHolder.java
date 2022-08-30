@@ -7,11 +7,11 @@ public final class InventoryHolder {
     private final String title;
     private final ItemStack[] contents;
 
-    public InventoryHolder(int size, String title){
+    public InventoryHolder(int size, String title) {
         this(title, new ItemStack[size]);
     }
 
-    public InventoryHolder(String title, ItemStack[] contents){
+    public InventoryHolder(String title, ItemStack[] contents) {
         this.title = title == null ? "Chest" : title;
         this.contents = contents;
     }
@@ -20,7 +20,7 @@ public final class InventoryHolder {
         return contents;
     }
 
-    public int getSize(){
+    public int getSize() {
         return contents.length;
     }
 
@@ -28,7 +28,7 @@ public final class InventoryHolder {
         return title;
     }
 
-    public void setItem(int slot, ItemStack itemStack){
+    public void setItem(int slot, ItemStack itemStack) {
         contents[slot] = itemStack;
     }
 

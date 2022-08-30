@@ -6,11 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class StatementHolder {
 
@@ -28,66 +24,70 @@ public final class StatementHolder {
 
     private boolean isBatch = false;
 
-    StatementHolder(DatabaseObject databaseObject, Query query){
+    StatementHolder(DatabaseObject databaseObject, Query query) {
         this.queryEnum = query;
         this.query = query.getStatement();
         this.databaseObject = databaseObject == null ? DatabaseObject.NULL_DATA : databaseObject;
         this.databaseObject.setModified(query);
     }
 
-    public StatementHolder setString(String value){
+    public static EnumMap<Query, IncreasableInteger> getQueryCalls() {
+        return queryCalls;
+    }
+
+    public StatementHolder setString(String value) {
         values.put(currentIndex++, value);
         return this;
     }
 
-    public StatementHolder setInt(int value){
+    public StatementHolder setInt(int value) {
         values.put(currentIndex++, value);
         return this;
     }
 
-    public StatementHolder setShort(short value){
+    public StatementHolder setShort(short value) {
         values.put(currentIndex++, value);
         return this;
     }
 
-    public StatementHolder setDouble(double value){
+    public StatementHolder setDouble(double value) {
         values.put(currentIndex++, value);
         return this;
     }
 
-    public StatementHolder setBoolean(boolean value){
+    public StatementHolder setBoolean(boolean value) {
         values.put(currentIndex++, value);
         return this;
     }
 
-    public StatementHolder setLocation(Location loc){
+    public StatementHolder setLocation(Location loc) {
         values.put(currentIndex++, loc == null ? "" : loc.getWorld().getName() + ", " + loc.getBlockX() + ", " +
                 loc.getBlockY() + ", " + loc.getBlockZ());
         return this;
     }
 
-    public StatementHolder setItemStack(ItemStack itemStack){
+    public StatementHolder setItemStack(ItemStack itemStack) {
         values.put(currentIndex++, itemStack == null ? "" : plugin.getNMSAdapter().serialize(itemStack));
         return this;
     }
 
-    public StatementHolder setInventories(Inventory[] inventories){
+    public StatementHolder setInventories(Inventory[] inventories) {
         values.put(currentIndex++, inventories == null ? "" : plugin.getNMSAdapter().serialize(inventories));
         return this;
     }
 
-    public void addBatch(){
+    public void addBatch() {
         batches.add(new HashMap<>(values));
         values.clear();
         currentIndex = 1;
     }
 
-    public void prepareBatch(){
+    public void prepareBatch() {
         isBatch = true;
     }
 
     public void execute(boolean async) {
-        if(async && !Executor.isDataThread()){
+        if (async && !Executor.isDataThread()) {
             Executor.data(() -> execute(false));
             return;
         }
@@ -119,7 +119,8 @@ public final class StatementHolder {
                         preparedStatement.executeBatch();
                         try {
                             SQLHelper.commit();
-                        }catch(Throwable ignored){}
+                        } catch (Throwable ignored) {
+                        }
 
                         SQLHelper.setAutoCommit(true);
                     } else {
@@ -144,15 +145,11 @@ public final class StatementHolder {
         }
     }
 
-    public static EnumMap<Query, IncreasableInteger> getQueryCalls() {
-        return queryCalls;
-    }
-
-    private static class StringHolder{
+    private static class StringHolder {
 
         private String value;
 
-        StringHolder(String value){
+        StringHolder(String value) {
             this.value = value;
         }
 
@@ -162,11 +159,11 @@ public final class StatementHolder {
         }
     }
 
-    public static final class IncreasableInteger{
+    public static final class IncreasableInteger {
 
         private int value = 0;
 
-        IncreasableInteger(){
+        IncreasableInteger() {
 
         }
 
@@ -174,7 +171,7 @@ public final class StatementHolder {
             return value;
         }
 
-        public void increase(){
+        public void increase() {
             value++;
         }
 

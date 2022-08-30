@@ -1,7 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_19_R1.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
-import com.bgsoftware.wildchests.nms.mapping.Remap;
+import com.bgsoftware.common.remaps.Remap;
 import com.bgsoftware.wildchests.nms.v1_19_R1.mappings.net.minecraft.world.item.ItemStack;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildItemStack;
@@ -132,16 +132,19 @@ public class WildInventory implements IInventory {
     }
 
     private int getMaxStackSize() {
-        return this.O_();
+        return this.maxStack;
     }
 
     @Remap(classPath = "net.minecraft.world.CompoundContainer",
             name = "getMaxStackSize",
             type = Remap.Type.METHOD,
             remappedName = "O_")
-    @Override
     public int O_() {
-        return this.maxStack;
+        return this.getMaxStackSize();
+    }
+    public int P_() {
+        // 1.19 mapping
+        return this.getMaxStackSize();
     }
 
     public void setMaxStackSize(int size) {

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public final class LinkedChestInteractEvent extends PlayerInteractEvent {
 
-    public LinkedChestInteractEvent(Player player, Block block){
+    public LinkedChestInteractEvent(Player player, Block block) {
         super(player, Action.RIGHT_CLICK_BLOCK, player.getItemInHand(), block, BlockFace.UP);
     }
 

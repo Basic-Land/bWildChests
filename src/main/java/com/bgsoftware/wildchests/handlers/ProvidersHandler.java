@@ -24,13 +24,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -41,12 +35,10 @@ public final class ProvidersHandler implements ProvidersManager {
 
     private final Map<DepositMethod, BankProvider> bankProviderMap = new EnumMap<>(DepositMethod.class);
     private final Map<UUID, PendingTransaction> pendingTransactions = new HashMap<>();
-
-    private PricesProvider pricesProvider = new PricesProvider_Default();
-    private StackerProvider stackerProvider = new StackerProvider_Default();
-
     private final List<IChestPlaceListener> chestPlaceListeners = new ArrayList<>();
     private final List<IChestBreakListener> chestBreakListeners = new ArrayList<>();
+    private PricesProvider pricesProvider = new PricesProvider_Default();
+    private StackerProvider stackerProvider = new StackerProvider_Default();
 
     public ProvidersHandler(WildChestsPlugin plugin) {
         this.plugin = plugin;
@@ -304,16 +296,16 @@ public final class ProvidersHandler implements ProvidersManager {
             this.success = success;
         }
 
+        public static <T> TransactionResult<T> of(T data, Predicate<T> success) {
+            return new TransactionResult<>(data, success);
+        }
+
         public boolean isSuccess() {
             return success == null || success.test(data);
         }
 
         public T getData() {
             return data;
-        }
-
-        public static <T> TransactionResult<T> of(T data, Predicate<T> success) {
-            return new TransactionResult<>(data, success);
         }
 
     }

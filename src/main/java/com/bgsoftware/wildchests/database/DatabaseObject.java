@@ -37,16 +37,16 @@ public abstract class DatabaseObject {
 
     public abstract void executeDeleteStatement(boolean async);
 
-    public void setModified(Query query){
-        modifiedCalls.put(query, modifiedCalls.getOrDefault(query, 0) + 1);
-    }
-
-    public void setUpdated(Query query){
+    public void setUpdated(Query query) {
         Optional.of(modifiedCalls.get(query)).ifPresent(calls -> modifiedCalls.put(query, calls - 1));
     }
 
-    public boolean isModified(){
+    public boolean isModified() {
         return !modifiedCalls.isEmpty();
+    }
+
+    public void setModified(Query query) {
+        modifiedCalls.put(query, modifiedCalls.getOrDefault(query, 0) + 1);
     }
 
 }

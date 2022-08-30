@@ -1,7 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_19_R1.inventory;
 
 import com.bgsoftware.wildchests.listeners.InventoryListener;
-import com.bgsoftware.wildchests.nms.mapping.Remap;
+import com.bgsoftware.common.remaps.Remap;
 import com.bgsoftware.wildchests.nms.v1_19_R1.NMSInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.world.entity.player.EntityHuman;
@@ -37,13 +37,9 @@ public class WildContainerChest extends ContainerChest {
         return bukkitEntity;
     }
 
-    @Remap(classPath = "net.minecraft.world.entity.Entity",
-            name = "getUUID",
-            type = Remap.Type.METHOD,
-            remappedName = "co")
     @Override
     public void b(EntityHuman entityHuman) {
-        if (!InventoryListener.buyNewPage.containsKey(entityHuman.co()))
+        if (!InventoryListener.buyNewPage.containsKey(entityHuman.getBukkitEntity().getUniqueId()))
             ((TileEntityWildChest) ((WChest) inventory.chest).getTileEntityContainer()).closeContainer(entityHuman);
     }
 

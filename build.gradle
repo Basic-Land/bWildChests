@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'WildChests'
-version = "2.4.1"
+version = "2.4.2"
 
 allprojects {
     apply plugin: 'java'
@@ -16,23 +16,23 @@ allprojects {
         maven { url 'https://repo.bg-software.com/repository/api/' }
         maven { url 'https://repo.bg-software.com/repository/common/' }
         maven { url 'https://repo.bg-software.com/repository/public-libs/' }
-
-        String mavenUsername = System.getenv('mavenUsername') == null ? project.mavenUsername : System.getenv('mavenUsername');
-        String mavenPassword = System.getenv('mavenPassword') == null ? project.mavenUsername : System.getenv('mavenPassword');
-
-        if (mavenUsername != null && mavenPassword != null) {
-            maven {
-                url 'https://repo.bg-software.com/repository/private-libs/'
-                credentials {
-                    username mavenUsername
-                    password mavenPassword
-                }
+        maven {
+            url 'http://nexus.basicland.cz:8081/repository/dev-private/'
+            allowInsecureProtocol = true
+            credentials {
+                username "dev"
+                password "mandarinka"
             }
+        }
+        maven {
+            url 'http://nexus.basicland.cz:8081/repository/dev-public/'
+            allowInsecureProtocol = true
         }
     }
 
     dependencies {
         compileOnly "com.bgsoftware.common.reflection:ReflectionUtils:latest"
+        compileOnly "com.bgsoftware.common.remaps:RemapsChecker:1.0.0"
     }
 
     build {
@@ -54,10 +54,13 @@ dependencies {
     implementation 'com.bgsoftware.common.reflection:ReflectionUtils:latest'
     implementation 'com.bgsoftware.common.config:CommentedConfiguration:1.0.3'
     implementation 'com.bgsoftware.common.updater:Updater:latest'
+    implementation 'com.bgsoftware.common.remaps:RemapsChecker:1.0.0'
+    implementation 'com.bgsoftware.common.mappings:MappingsChecker:1.0.0'
 
     // Spigot jars
-    compileOnly "org.spigotmc:v1_8_R1:latest"
+    compileOnly 'org.spigotmc:v1_8_R1:latest'
     compileOnly 'org.spigotmc:v1_16_R3-Tuinity:latest'
+    compileOnly 'cz.basicland:bantidupe:2.0.5'
 }
 
 jar {

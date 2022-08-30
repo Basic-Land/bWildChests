@@ -2,25 +2,19 @@ package com.bgsoftware.wildchests.objects.data;
 
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.key.Key;
+import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.api.objects.DepositMethod;
+import com.bgsoftware.wildchests.api.objects.data.ChestData;
+import com.bgsoftware.wildchests.api.objects.data.InventoryData;
+import com.bgsoftware.wildchests.key.KeySet;
 import com.bgsoftware.wildchests.utils.RecipeUtils;
 import com.google.common.collect.Iterators;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import com.bgsoftware.wildchests.api.objects.ChestType;
-import com.bgsoftware.wildchests.api.objects.data.ChestData;
-import com.bgsoftware.wildchests.api.objects.data.InventoryData;
-import com.bgsoftware.wildchests.key.KeySet;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class WChestData implements ChestData {
 
@@ -79,7 +73,7 @@ public final class WChestData implements ChestData {
         return plugin.getNMSAdapter().setChestName(itemStack, name);
     }
 
-    public ItemStack getItemRaw(){
+    public ItemStack getItemRaw() {
         return itemStack.clone();
     }
 
@@ -94,20 +88,35 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public void setDefaultSize(int size) {
+        this.defaultSize = size;
+    }
+
+    @Override
     public String getDefaultTitle() {
         return defaultTitle;
     }
 
     @Override
+    public void setDefaultTitle(String title) {
+        this.defaultTitle = title;
+    }
+
+    @Override
     public String getTitle(int page) {
         String title = pagesData.containsKey(page) ? pagesData.get(page).getTitle() : defaultTitle;
-        if(title.length() >= 32) title = title.substring(0, 31);
+        if (title.length() >= 32) title = title.substring(0, 31);
         return title;
     }
 
     @Override
-    public boolean isSellMode(){
+    public boolean isSellMode() {
         return sellMode;
+    }
+
+    @Override
+    public void setSellMode(boolean sellMode) {
+        this.sellMode = sellMode;
     }
 
     @Override
@@ -116,8 +125,25 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public void setHopperFilter(boolean hopperFilter) {
+        this.hopperFilter = hopperFilter;
+    }
+
+    @Override
     public boolean isAutoCrafter() {
         return Iterators.size(getRecipes()) != 0;
+    }
+
+    @Override
+    public void setAutoCrafter(List<String> recipes) {
+        Iterator<Recipe> bukkitRecipes = Bukkit.recipeIterator();
+        KeySet recipesSet = new KeySet(recipes);
+
+        while (bukkitRecipes.hasNext()) {
+            Recipe recipe = bukkitRecipes.next();
+            if (recipesSet.contains(recipe.getResult()))
+                this.recipes.put(recipe, RecipeUtils.getIngredients(recipe));
+        }
     }
 
     @Override
@@ -125,7 +151,7 @@ public final class WChestData implements ChestData {
         return Iterators.unmodifiableIterator(recipes.keySet().iterator());
     }
 
-    public Iterator<Map.Entry<Recipe, List<RecipeUtils.RecipeIngredient>>> getRecipeIngredients(){
+    public Iterator<Map.Entry<Recipe, List<RecipeUtils.RecipeIngredient>>> getRecipeIngredients() {
         return Iterators.unmodifiableIterator(recipes.entrySet().iterator());
     }
 
@@ -134,9 +160,9 @@ public final class WChestData implements ChestData {
         Iterator<Recipe> recipes = getRecipes();
         boolean contains = false;
 
-        while(recipes.hasNext()){
+        while (recipes.hasNext()) {
             Recipe recipe = recipes.next();
-            if(recipe.getResult().isSimilar(result))
+            if (recipe.getResult().isSimilar(result))
                 contains = true;
         }
 
@@ -149,8 +175,18 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public void setPagesData(Map<Integer, InventoryData> pagesData) {
+        this.pagesData = new HashMap<>(pagesData);
+    }
+
+    @Override
     public int getDefaultPagesAmount() {
         return defaultPagesAmount;
+    }
+
+    @Override
+    public void setDefaultPagesAmount(int defaultPagesAmount) {
+        this.defaultPagesAmount = defaultPagesAmount;
     }
 
     @Override
@@ -159,8 +195,18 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public void setMultiplier(double multiplier) {
+        this.multiplier = Math.max(0, multiplier);
+    }
+
+    @Override
     public boolean isAutoCollect() {
         return autoCollect;
+    }
+
+    @Override
+    public void setAutoCollect(boolean autoCollect) {
+        this.autoCollect = autoCollect;
     }
 
     @Override
@@ -174,98 +220,13 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public boolean isAutoSuctionChunk() {
-        return autoSuctionChunk;
-    }
-
-    @Override
-    public DepositMethod getDepositMethod() {
-        return depositMethod;
-    }
-
-    @Override
-    public Set<Key> getBlacklisted() {
-        return blacklisted;
-    }
-
-    @Override
-    public Set<Key> getWhitelisted() {
-        return whitelisted;
-    }
-
-    @Override
-    public BigInteger getStorageUnitMaxAmount() {
-        if(ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
-            throw new UnsupportedOperationException("Cannot get max amount of an unknown storage unit.");
-
-        return maxAmount;
-    }
-
-    @Override
-    public List<String> getChestParticles() {
-        return particles;
-    }
-
-    @Override
-    public void setDefaultSize(int size) {
-        this.defaultSize = size;
-    }
-
-    @Override
-    public void setDefaultTitle(String title) {
-        this.defaultTitle = title;
-    }
-
-    @Override
-    public void setSellMode(boolean sellMode){
-        this.sellMode = sellMode;
-    }
-
-    @Override
-    public void setDepositMethod(DepositMethod depositMethod){
-        this.depositMethod = depositMethod;
-    }
-
-    @Override
-    public void setHopperFilter(boolean hopperFilter) {
-        this.hopperFilter = hopperFilter;
-    }
-
-    @Override
-    public void setAutoCrafter(List<String> recipes) {
-        Iterator<Recipe> bukkitRecipes = Bukkit.recipeIterator();
-        KeySet recipesSet = new KeySet(recipes);
-
-        while(bukkitRecipes.hasNext()){
-            Recipe recipe = bukkitRecipes.next();
-            if(recipesSet.contains(recipe.getResult()))
-                this.recipes.put(recipe, RecipeUtils.getIngredients(recipe));
-        }
-    }
-
-    @Override
-    public void setPagesData(Map<Integer, InventoryData> pagesData) {
-        this.pagesData = new HashMap<>(pagesData);
-    }
-
-    @Override
-    public void setDefaultPagesAmount(int defaultPagesAmount) {
-        this.defaultPagesAmount = defaultPagesAmount;
-    }
-
-    @Override
-    public void setMultiplier(double multiplier) {
-        this.multiplier = Math.max(0, multiplier);
-    }
-
-    @Override
-    public void setAutoCollect(boolean autoCollect) {
-        this.autoCollect = autoCollect;
-    }
-
-    @Override
     public void setAutoSuctionRange(int autoSuctionRange) {
         this.autoSuctionRange = Math.max(1, autoSuctionRange);
+    }
+
+    @Override
+    public boolean isAutoSuctionChunk() {
+        return autoSuctionChunk;
     }
 
     @Override
@@ -274,8 +235,28 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public DepositMethod getDepositMethod() {
+        return depositMethod;
+    }
+
+    @Override
+    public void setDepositMethod(DepositMethod depositMethod) {
+        this.depositMethod = depositMethod;
+    }
+
+    @Override
+    public Set<Key> getBlacklisted() {
+        return blacklisted;
+    }
+
+    @Override
     public void setBlacklisted(Set<Key> blacklisted) {
         this.blacklisted.addAll(blacklisted);
+    }
+
+    @Override
+    public Set<Key> getWhitelisted() {
+        return whitelisted;
     }
 
     @Override
@@ -284,11 +265,24 @@ public final class WChestData implements ChestData {
     }
 
     @Override
+    public BigInteger getStorageUnitMaxAmount() {
+        if (ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
+            throw new UnsupportedOperationException("Cannot get max amount of an unknown storage unit.");
+
+        return maxAmount;
+    }
+
+    @Override
     public void setStorageUnitMaxAmount(BigInteger maxAmount) {
-        if(ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
+        if (ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
             throw new UnsupportedOperationException("Cannot set max amount of an unknown storage unit.");
 
         this.maxAmount = maxAmount;
+    }
+
+    @Override
+    public List<String> getChestParticles() {
+        return particles;
     }
 
     @Override
@@ -308,7 +302,7 @@ public final class WChestData implements ChestData {
                 "}";
     }
 
-    public void loadFromData(WChestData chestData){
+    public void loadFromData(WChestData chestData) {
         this.itemStack = chestData.itemStack;
         this.defaultSize = chestData.defaultSize;
         this.defaultTitle = chestData.defaultTitle;

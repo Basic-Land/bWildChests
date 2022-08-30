@@ -18,17 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public final class CommandLink implements ICommand {
 
     private static final Set<Material> TRANSPARENT_TYPES = createTransparentTypes();
+    private final Map<UUID, Location> players = new HashMap<>();
 
     private static Set<Material> createTransparentTypes() {
         Set<Material> materialSet = EnumSet.noneOf(Material.class);
@@ -38,8 +33,6 @@ public final class CommandLink implements ICommand {
         }
         return materialSet;
     }
-
-    private final Map<UUID, Location> players = new HashMap<>();
 
     @Override
     public String getLabel() {
@@ -73,12 +66,10 @@ public final class CommandLink implements ICommand {
 
     @Override
     public void perform(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return;
         }
-
-        Player player = (Player) sender;
 
         Block targetBlock = player.getTargetBlock(TRANSPARENT_TYPES, 5);
 
@@ -97,12 +88,10 @@ public final class CommandLink implements ICommand {
 
         Chest chest = plugin.getChestsManager().getChest(targetBlock.getLocation());
 
-        if (!(chest instanceof LinkedChest)) {
+        if (!(chest instanceof LinkedChest linkedChest)) {
             Locale.NOT_LINKED_CHEST.send(player);
             return;
         }
-
-        LinkedChest linkedChest = (LinkedChest) chest;
 
         if (players.containsKey(player.getUniqueId())) {
             LinkedChest originalChest = plugin.getChestsManager().getLinkedChest(players.get(player.getUniqueId()));

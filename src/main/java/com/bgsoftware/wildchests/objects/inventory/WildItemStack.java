@@ -13,9 +13,13 @@ public final class WildItemStack<T, U extends ItemStack> {
     private final T itemStack;
     private final U craftItemStack;
 
-    public WildItemStack(T itemStack, U craftItemStack){
+    public WildItemStack(T itemStack, U craftItemStack) {
         this.itemStack = itemStack;
         this.craftItemStack = craftItemStack;
+    }
+
+    public static WildItemStack<?, ?> of(ItemStack itemStack) {
+        return plugin.getNMSInventory().createItemStack(itemStack);
     }
 
     public T getItemStack() {
@@ -26,12 +30,8 @@ public final class WildItemStack<T, U extends ItemStack> {
         return craftItemStack;
     }
 
-    public WildItemStack<?, ?> cloneItemStack(){
+    public WildItemStack<?, ?> cloneItemStack() {
         return of(craftItemStack);
-    }
-
-    public static WildItemStack<?, ?> of(ItemStack itemStack){
-        return plugin.getNMSInventory().createItemStack(itemStack);
     }
 
 }

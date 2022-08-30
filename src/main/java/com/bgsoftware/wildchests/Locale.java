@@ -11,7 +11,7 @@ import java.util.Map;
 
 public final class Locale {
 
-    private static Map<String, Locale> localeMap = new HashMap<>();
+    private static final Map<String, Locale> localeMap = new HashMap<>();
 
     public static Locale SOLD_CHEST_HEADER = new Locale("SOLD_CHEST_HEADER");
     public static Locale SOLD_CHEST_LINE = new Locale("SOLD_CHEST_LINE");
@@ -55,13 +55,37 @@ public final class Locale {
     public static Locale FORMAT_THOUSANDS = new Locale("FORMAT_THOUSANDS");
     public static Locale MONEY_EARNED_OFFLINE = new Locale("MONEY_EARNED_OFFLINE");
     public static Locale LEFTOVERS_ITEMS_WARNING = new Locale("LEFTOVERS_ITEMS_WARNING");
-
+    private String message;
 
     private Locale(String identifier) {
         localeMap.put(identifier, this);
     }
 
-    private String message;
+    public static void reload(WildChestsPlugin plugin) {
+        WildChestsPlugin.log("Loading messages started...");
+        long startTime = System.currentTimeMillis();
+        int messagesAmount = 0;
+        File file = new File(plugin.getDataFolder(), "lang.yml");
+
+        if (!file.exists())
+            WildChestsPlugin.getPlugin().saveResource("lang.yml", false);
+
+        CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(file);
+
+        try {
+            cfg.syncWithConfig(file, plugin.getResource("lang.yml"));
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
+
+        for (String identifier : localeMap.keySet()) {
+            localeMap.get(identifier).setMessage(ChatColor.translateAlternateColorCodes('&', cfg.getString(identifier, "")));
+            messagesAmount++;
+        }
+
+        WildChestsPlugin.log(" - Found " + messagesAmount + " messages in lang.yml.");
+        WildChestsPlugin.log("Loading messages done (Took " + (System.currentTimeMillis() - startTime) + "ms)");
+    }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isEmpty() {
@@ -89,32 +113,6 @@ public final class Locale {
 
     private void setMessage(String message) {
         this.message = message;
-    }
-
-    public static void reload(WildChestsPlugin plugin) {
-        WildChestsPlugin.log("Loading messages started...");
-        long startTime = System.currentTimeMillis();
-        int messagesAmount = 0;
-        File file = new File(plugin.getDataFolder(), "lang.yml");
-
-        if (!file.exists())
-            WildChestsPlugin.getPlugin().saveResource("lang.yml", false);
-
-        CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(file);
-
-        try {
-            cfg.syncWithConfig(file, plugin.getResource("lang.yml"));
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
-
-        for (String identifier : localeMap.keySet()) {
-            localeMap.get(identifier).setMessage(ChatColor.translateAlternateColorCodes('&', cfg.getString(identifier, "")));
-            messagesAmount++;
-        }
-
-        WildChestsPlugin.log(" - Found " + messagesAmount + " messages in lang.yml.");
-        WildChestsPlugin.log("Loading messages done (Took " + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
 }

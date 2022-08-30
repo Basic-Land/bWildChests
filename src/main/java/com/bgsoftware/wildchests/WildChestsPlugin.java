@@ -1,5 +1,7 @@
 package com.bgsoftware.wildchests;
 
+import com.bgsoftware.common.mappings.MappingsChecker;
+import com.bgsoftware.common.remaps.TestRemaps;
 import com.bgsoftware.common.updater.Updater;
 import com.bgsoftware.wildchests.api.WildChests;
 import com.bgsoftware.wildchests.api.WildChestsAPI;
@@ -27,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,22 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
     private NMSInventory nmsInventory;
 
     private boolean shouldEnable = true;
+
+    public static void log(String message) {
+        message = ChatColor.translateAlternateColorCodes('&', message);
+        boolean colored = message.contains(ChatColor.COLOR_CHAR + "");
+        String lastColor = colored ? ChatColor.getLastColors(message.substring(0, 2)) : "";
+        for (String line : message.split("\n")) {
+            if (colored)
+                Bukkit.getConsoleSender().sendMessage(lastColor + "[" + plugin.getDescription().getName() + "] " + line);
+            else
+                plugin.getLogger().info(line);
+        }
+    }
+
+    public static WildChestsPlugin getPlugin() {
+        return plugin;
+    }
 
     @Override
     public void onLoad() {
@@ -149,8 +168,11 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
         try {
             nmsAdapter = (NMSAdapter) Class.forName(String.format("com.bgsoftware.wildchests.nms.%s.NMSAdapter", version)).newInstance();
 
-            if(!nmsAdapter.isMappingsSupported()) {
+            String mappingVersionHash = nmsAdapter.getMappingsHash();
+
+            if (mappingVersionHash != null && !MappingsChecker.checkMappings(mappingVersionHash, version)) {
                 log("Error while loading adapter - your version mappings are not supported... Please contact @Ome_R");
+                log("Your mappings version: " + mappingVersionHash);
                 return false;
             }
 
@@ -159,7 +181,15 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
             log("Error while loading adapter - unknown adapter " + version + "... Please contact @Ome_R");
             return false;
         }
-
+        File mappingsFile = new File("mappings");
+        if (mappingsFile.exists()) {
+            try {
+                TestRemaps.testRemapsForClassesInPackage(mappingsFile,
+                        plugin.getClassLoader(), "com.bgsoftware.wildchests.nms." + version);
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        }
         return true;
     }
 
@@ -197,21 +227,5 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
 
     public Updater getUpdater() {
         return updater;
-    }
-
-    public static void log(String message) {
-        message = ChatColor.translateAlternateColorCodes('&', message);
-        boolean colored = message.contains(ChatColor.COLOR_CHAR + "");
-        String lastColor = colored ? ChatColor.getLastColors(message.substring(0, 2)) : "";
-        for (String line : message.split("\n")) {
-            if (colored)
-                Bukkit.getConsoleSender().sendMessage(lastColor + "[" + plugin.getDescription().getName() + "] " + line);
-            else
-                plugin.getLogger().info(line);
-        }
-    }
-
-    public static WildChestsPlugin getPlugin() {
-        return plugin;
     }
 }

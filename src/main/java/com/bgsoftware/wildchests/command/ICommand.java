@@ -1,7 +1,7 @@
 package com.bgsoftware.wildchests.command;
 
-import org.bukkit.command.CommandSender;
 import com.bgsoftware.wildchests.WildChestsPlugin;
+import org.bukkit.command.CommandSender;
 
 import java.util.List;
 

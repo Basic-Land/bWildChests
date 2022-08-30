@@ -1,10 +1,10 @@
 package com.bgsoftware.wildchests.command.commands;
 
+import com.bgsoftware.wildchests.WildChestsPlugin;
+import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.Executor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import com.bgsoftware.wildchests.WildChestsPlugin;
-import com.bgsoftware.wildchests.command.ICommand;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,15 @@
 package com.bgsoftware.wildchests.command.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import com.bgsoftware.wildchests.Locale;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.ItemUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import cz.basicland.bantidupe.bAntiDupe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,43 +50,43 @@ public final class CommandGive implements ICommand {
     public void perform(WildChestsPlugin plugin, CommandSender sender, String[] args) {
         Player target = Bukkit.getPlayer(args[1]);
 
-        if(target == null){
+        if (target == null) {
             Locale.INVALID_PLAYER.send(sender, args[1]);
             return;
         }
 
         ChestData chestData = plugin.getChestsManager().getChestData(args[2]);
 
-        if(chestData == null){
+        if (chestData == null) {
             Locale.INVALID_CHEST.send(sender, args[2]);
             return;
         }
 
         ItemStack chestItem = chestData.getItemStack();
 
-        if(args.length == 4){
-            try{
+        if (args.length == 4) {
+            try {
                 chestItem.setAmount(Integer.valueOf(args[3]));
-            }catch(IllegalArgumentException ex){
+            } catch (IllegalArgumentException ex) {
                 Locale.INVALID_AMOUNT.send(sender);
                 return;
             }
         }
 
-        ItemUtils.addItem(chestItem, target.getInventory(), target.getLocation());
+        ItemUtils.addItem(bAntiDupe.getApi().addUniqueId(chestItem), target.getInventory(), target.getLocation());
         Locale.CHEST_GIVE_PLAYER.send(sender, target.getName(), chestItem.getAmount(), chestData.getName(), chestItem.getItemMeta().getDisplayName());
         Locale.CHEST_RECIEVE.send(target, chestItem.getAmount(), chestData.getName(), sender.getName(), chestItem.getItemMeta().getDisplayName());
     }
 
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        if(!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()))
             return new ArrayList<>();
 
         if (args.length == 3) {
             List<String> list = new ArrayList<>();
-            for(ChestData chestData : plugin.getChestsManager().getAllChestData())
-                if(chestData.getName().startsWith(args[2]))
+            for (ChestData chestData : plugin.getChestsManager().getAllChestData())
+                if (chestData.getName().startsWith(args[2]))
                     list.add(chestData.getName());
             return list;
         }

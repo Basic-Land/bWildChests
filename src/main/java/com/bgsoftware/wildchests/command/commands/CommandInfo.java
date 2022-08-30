@@ -1,13 +1,13 @@
 package com.bgsoftware.wildchests.command.commands;
 
-import com.bgsoftware.wildchests.objects.data.WChestData;
-import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.Recipe;
 import com.bgsoftware.wildchests.Locale;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
+import com.bgsoftware.wildchests.objects.data.WChestData;
 import com.bgsoftware.wildchests.utils.ItemUtils;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.Recipe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,7 +49,7 @@ public final class CommandInfo implements ICommand {
     public void perform(WildChestsPlugin plugin, CommandSender sender, String[] args) {
         ChestData chestData = plugin.getChestsManager().getChestData(args[1]);
 
-        if(chestData == null){
+        if (chestData == null) {
             Locale.INVALID_CHEST.send(sender, args[1]);
             return;
         }
@@ -65,7 +65,7 @@ public final class CommandInfo implements ICommand {
         Locale.CHEST_INFO_SELL_MODE.send(sender, chestData.isSellMode());
 
         //Optional sections
-        if(chestData.isAutoCrafter())
+        if (chestData.isAutoCrafter())
             Locale.CHEST_INFO_RECIPES.send(sender, getRecipesAsString(chestData.getRecipes()));
 
         //Footer
@@ -74,13 +74,13 @@ public final class CommandInfo implements ICommand {
 
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        if(!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()))
             return new ArrayList<>();
 
         if (args.length == 2) {
             List<String> list = new ArrayList<>();
-            for(ChestData chestData : plugin.getChestsManager().getAllChestData())
-                if(chestData.getName().startsWith(args[1]))
+            for (ChestData chestData : plugin.getChestsManager().getAllChestData())
+                if (chestData.getName().startsWith(args[1]))
                     list.add(chestData.getName());
             return list;
         }
@@ -92,13 +92,13 @@ public final class CommandInfo implements ICommand {
         return null;
     }
 
-    private String getRecipesAsString(Iterator<Recipe> recipes){
+    private String getRecipesAsString(Iterator<Recipe> recipes) {
         StringBuilder string = new StringBuilder();
 
-        while(recipes.hasNext()){
+        while (recipes.hasNext()) {
             Recipe recipe = recipes.next();
             String formattedItem = ItemUtils.getFormattedType(recipe.getResult().getType().name());
-            if(!string.toString().contains(formattedItem))
+            if (!string.toString().contains(formattedItem))
                 string.append(", ").append(formattedItem);
         }
 
