@@ -67,7 +67,7 @@ public final class CommandGive implements ICommand {
 
         if (args.length == 4) {
             try {
-                chestItem.setAmount(Integer.valueOf(args[3]));
+                chestItem.setAmount(Integer.parseInt(args[3]));
             } catch (IllegalArgumentException ex) {
                 Locale.INVALID_AMOUNT.send(sender);
                 return;
