@@ -26,9 +26,8 @@ import java.util.UUID;
 public final class WStorageChest extends WChest implements StorageChest {
 
     private final CraftWildInventory inventory;
-
-    private BigInteger amount = BigInteger.ZERO, maxAmount;
     private final WildItemStack<?, ?>[] contents = new WildItemStack[5];
+    private BigInteger amount = BigInteger.ZERO, maxAmount;
     private int maxStackSize = 64;
 
     private boolean broken = false;
@@ -94,11 +93,6 @@ public final class WStorageChest extends WChest implements StorageChest {
     }
 
     @Override
-    public BigInteger getExactAmount() {
-        return getAmount();
-    }
-
-    @Override
     public void setAmount(BigInteger amount) {
         this.amount = amount.max(BigInteger.ZERO);
         if (amount.compareTo(BigInteger.ZERO) == 0) {
@@ -116,6 +110,11 @@ public final class WStorageChest extends WChest implements StorageChest {
     @Override
     public void setAmount(int amount) {
         setAmount(BigInteger.valueOf(amount));
+    }
+
+    @Override
+    public BigInteger getExactAmount() {
+        return getAmount();
     }
 
     @Override

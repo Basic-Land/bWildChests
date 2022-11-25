@@ -28,7 +28,7 @@ public final class CoreProtectHook {
     }
 
     public static void recordBlockBreak(@Nullable OfflinePlayer offlinePlayer, Chest chest) {
-        if(offlinePlayer == null) // We don't want entities to record block breaks
+        if (offlinePlayer == null) // We don't want entities to record block breaks
             return;
 
         if (!Bukkit.isPrimaryThread()) {

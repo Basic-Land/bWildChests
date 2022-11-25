@@ -8,18 +8,21 @@ public interface ProvidersManager {
 
     /**
      * Set the prices provider for the core.
+     *
      * @param pricesProvider The provider to set.
      */
     void setPricesProvider(PricesProvider pricesProvider);
 
     /**
      * Set the stacker provider for the core.
+     *
      * @param stackerProvider The provider to set.
      */
     void setStackerProvider(StackerProvider stackerProvider);
 
     /**
      * Register custom banks provider for the core.
+     *
      * @param banksProvider The provider to set.
      */
     void setBanksProvider(BankProvider banksProvider);

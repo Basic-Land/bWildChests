@@ -23,7 +23,6 @@ public class WRegularChest extends WChest implements RegularChest {
 
     public WRegularChest(UUID placer, Location location, ChestData chestData) {
         super(placer, location, chestData);
-        this.inventories = new SyncedArray<>(chestData.getDefaultPagesAmount());
         initContainer(chestData);
     }
 
@@ -169,7 +168,9 @@ public class WRegularChest extends WChest implements RegularChest {
         }
     }
 
-    private void initContainer(ChestData chestData) {
+    protected void initContainer(ChestData chestData) {
+        this.inventories = new SyncedArray<>(chestData.getDefaultPagesAmount());
+
         int size = chestData.getDefaultSize();
         Map<Integer, InventoryData> pagesData = chestData.getPagesData();
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public final class PricesProvider_EconomyShopGUI implements PricesProvider {
 
-    public PricesProvider_EconomyShopGUI(){
+    public PricesProvider_EconomyShopGUI() {
         WildChestsPlugin.log(" - Using EconomyShopGUI as PricesProvider.");
     }
 

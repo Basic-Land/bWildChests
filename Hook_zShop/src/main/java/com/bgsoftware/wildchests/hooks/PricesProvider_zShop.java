@@ -13,7 +13,7 @@ public final class PricesProvider_zShop implements PricesProvider {
 
     private final ShopManager shopManager;
 
-    public PricesProvider_zShop(){
+    public PricesProvider_zShop() {
         WildChestsPlugin.log(" - Using zShop as PricesProvider.");
 
         RegisteredServiceProvider<ShopManager> provider = Bukkit.getServicesManager().getRegistration(ShopManager.class);

@@ -60,6 +60,7 @@ public interface Chest {
     /**
      * Add items to the chest.
      * These items will be sold / crafted, depends on the chest's actions.
+     *
      * @param itemStacks The items to add
      * @return See Inventory#addItems return value.
      */
@@ -68,6 +69,7 @@ public interface Chest {
     /**
      * Add items to the chest.
      * These items will be sold / crafted, depends on the chest's actions.
+     *
      * @param itemStacks The items to add
      * @return See Inventory#addItems return value.
      * @deprecated use addItems(ItemStack... itemStacks)
@@ -77,29 +79,33 @@ public interface Chest {
 
     /**
      * Remove an item from the chest.
+     *
      * @param amountToRemove The amount to remove from the item.
-     * @param itemStack The item to remove.
+     * @param itemStack      The item to remove.
      */
     void removeItem(int amountToRemove, ItemStack itemStack);
 
     /**
      * Get an item from the chest in a specific slot.
+     *
      * @param slot The slot of the item. Can support all the pages using the following formula:
-     *          slot = (page-index) * (pages-size) + (page-slot)
+     *             slot = (page-index) * (pages-size) + (page-slot)
      * @return The item in that slot. If non found, an AIR itemstack will be returned.
      */
     ItemStack getItem(int slot);
 
     /**
      * Set an item in the chest in a specific slot.
-     * @param slot The slot of the item. Can support all the pages using the following formula:
-     *          slot = (page-index) * (pages-size) + (page-slot)
+     *
+     * @param slot      The slot of the item. Can support all the pages using the following formula:
+     *                  slot = (page-index) * (pages-size) + (page-slot)
      * @param itemStack The item to set.
      */
     void setItem(int slot, ItemStack itemStack);
 
     /**
      * Get a specific page of this chest.
+     *
      * @param page The page index to get.
      *             The index should between 0 and getPagesAmount() return value.
      */
@@ -112,7 +118,8 @@ public interface Chest {
 
     /**
      * Set a page with a specific inventory.
-     * @param page The page's index. Should between 0 and getPagesAmount() return value.
+     *
+     * @param page      The page's index. Should between 0 and getPagesAmount() return value.
      * @param inventory The inventory to change the contents to.
      * @deprecated You should use setPage(int page, int size, String title), and then change the contents manually.
      */
@@ -121,22 +128,25 @@ public interface Chest {
 
     /**
      * Set a page with a specific size and title.
-     * @param page The page's index. Should between 0 and getPagesAmount() return value.
-     * @param size The size of the page. Should be between 9 and 54.
+     *
+     * @param page  The page's index. Should between 0 and getPagesAmount() return value.
+     * @param size  The size of the page. Should be between 9 and 54.
      * @param title The title of the page.
      */
     Inventory setPage(int page, int size, String title);
 
     /**
      * Open a page for a player.
+     *
      * @param player The player to open the page for
-     * @param page The page to open. Should between 0 and getPagesAmount() return value.
+     * @param page   The page to open. Should between 0 and getPagesAmount() return value.
      */
     void openPage(Player player, int page);
 
     /**
      * Handle the close of a page.
      * This will not close the page itself (use player#closeInventory), but will clear tracking etc.
+     *
      * @param player The player to close the page for.
      */
     void closePage(Player player);
@@ -148,6 +158,7 @@ public interface Chest {
 
     /**
      * Get the index of a page.
+     *
      * @param inventory The page's inventory.
      * @return The page index. If wasn't found, -1 will be returned. StorageUnit will always return 0,
      * as it doesn't support multiple pages.
@@ -158,6 +169,7 @@ public interface Chest {
 
     /**
      * Handle the break of the chest.
+     *
      * @param event The BlockBreakEvent that was fired.
      * @return True if succeed, otherwise false.
      */
@@ -165,6 +177,7 @@ public interface Chest {
 
     /**
      * Handle the placement of the chest.
+     *
      * @param event The BlockPlaceEvent that was fired.
      * @return True if succeed, otherwise false.
      * @deprecated Not used in v2.0.0 anymore.
@@ -174,6 +187,7 @@ public interface Chest {
 
     /**
      * Handle opening the chest.
+     *
      * @param event The PlayerInteractEvent that was fired.
      * @return True if succeed, otherwise false.
      */
@@ -181,6 +195,7 @@ public interface Chest {
 
     /**
      * Handle closing the chest.
+     *
      * @param event The InventoryCloseEvent that was fired.
      * @return True if succeed, otherwise false.
      */
@@ -188,6 +203,7 @@ public interface Chest {
 
     /**
      * Handle item interactions in the chest.
+     *
      * @param event The InventoryClickEvent that was fired.
      * @return True if the interaction was captured, otherwise false.
      */
@@ -195,6 +211,7 @@ public interface Chest {
 
     /**
      * Handle a hopper moving items into the chest.
+     *
      * @param event The InventoryMoveItemEvent that was fired.
      * @return True if items were successfully transferred, otherwise false.
      * @deprecated Not used in v2.0.0 anymore.
@@ -204,8 +221,9 @@ public interface Chest {
 
     /**
      * Handle a hopper moving items into the chest.
+     *
      * @param itemStack The item that was moved into.
-     * @param hopper The hopper that added the item.
+     * @param hopper    The hopper that added the item.
      * @return True if items were successfully transferred, otherwise false.
      * @deprecated Not used in v2.0.0 anymore.
      */
@@ -214,6 +232,7 @@ public interface Chest {
 
     /**
      * Handle a hopper moving items out of the chest.
+     *
      * @param hopperInventory The inventory of the hopper that took the items.
      * @return True if items were successfully transferred, otherwise false.
      * @deprecated Not used in v2.0.0 anymore.
@@ -223,7 +242,8 @@ public interface Chest {
 
     /**
      * Check if hoppers can take items in a specific slot.
-     * @param slot The slot of the item.
+     *
+     * @param slot      The slot of the item.
      * @param itemStack The item to take.
      * @return True if they can, otherwise false.
      */
@@ -236,6 +256,7 @@ public interface Chest {
 
     /**
      * Check if hoppers can move items into the chest.
+     *
      * @param itemStack The item to add.
      * @return True if they can, otherwise false.
      */

@@ -1,7 +1,6 @@
 package com.bgsoftware.wildchests;
 
-import com.bgsoftware.common.mappings.MappingsChecker;
-import com.bgsoftware.common.remaps.TestRemaps;
+import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.common.updater.Updater;
 import com.bgsoftware.wildchests.api.WildChests;
 import com.bgsoftware.wildchests.api.WildChestsAPI;
@@ -20,18 +19,17 @@ import com.bgsoftware.wildchests.nms.NMSAdapter;
 import com.bgsoftware.wildchests.nms.NMSInventory;
 import com.bgsoftware.wildchests.task.NotifierTask;
 import com.bgsoftware.wildchests.utils.Executor;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.World;
+import com.bgsoftware.wildchests.utils.Pair;
+import com.bgsoftware.wildchests.utils.ServerVersion;
+import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class WildChestsPlugin extends JavaPlugin implements WildChests {
@@ -164,33 +162,51 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
     }
 
     private boolean loadNMSAdapter() {
-        String version = getServer().getClass().getPackage().getName().split("\\.")[3];
-        try {
-            nmsAdapter = (NMSAdapter) Class.forName(String.format("com.bgsoftware.wildchests.nms.%s.NMSAdapter", version)).newInstance();
+        String version = null;
 
-            String mappingVersionHash = nmsAdapter.getMappingsHash();
+        if (ServerVersion.isLessThan(ServerVersion.v1_17)) {
+            version = getServer().getClass().getPackage().getName().split("\\.")[3];
+        } else {
+            ReflectMethod<Integer> getDataVersion = new ReflectMethod<>(UnsafeValues.class, "getDataVersion");
+            int dataVersion = getDataVersion.invoke(Bukkit.getUnsafe());
 
-            if (mappingVersionHash != null && !MappingsChecker.checkMappings(mappingVersionHash, version)) {
-                log("Error while loading adapter - your version mappings are not supported... Please contact @Ome_R");
-                log("Your mappings version: " + mappingVersionHash);
-                return false;
+            List<Pair<Integer, String>> versions = Arrays.asList(
+                    new Pair<>(2729, null),
+                    new Pair<>(2730, "v117"),
+                    new Pair<>(2865, "v1181"),
+                    new Pair<>(2975, "v1182"),
+                    new Pair<>(3105, "v119"),
+                    new Pair<>(3117, "v1191"),
+                    new Pair<>(3120, "v1192")
+            );
+
+            for (Pair<Integer, String> versionData : versions) {
+                if (dataVersion <= versionData.key) {
+                    version = versionData.value;
+                    break;
+                }
             }
 
-            nmsInventory = (NMSInventory) Class.forName(String.format("com.bgsoftware.wildchests.nms.%s.NMSInventory", version)).newInstance();
-        } catch (Exception ex) {
-            log("Error while loading adapter - unknown adapter " + version + "... Please contact @Ome_R");
-            return false;
+            if (version == null) {
+                log("Data version: " + dataVersion);
+            }
         }
-        File mappingsFile = new File("mappings");
-        if (mappingsFile.exists()) {
+
+        if (version != null) {
             try {
-                TestRemaps.testRemapsForClassesInPackage(mappingsFile,
-                        plugin.getClassLoader(), "com.bgsoftware.wildchests.nms." + version);
+                nmsAdapter = (NMSAdapter) Class.forName(String.format("com.bgsoftware.wildchests.nms.%s.NMSAdapter", version)).newInstance();
+                nmsInventory = (NMSInventory) Class.forName(String.format("com.bgsoftware.wildchests.nms.%s.NMSInventory", version)).newInstance();
+
+                return true;
             } catch (Exception error) {
                 error.printStackTrace();
             }
         }
-        return true;
+
+        log("&cThe plugin doesn't support your minecraft version.");
+        log("&cPlease try a different version.");
+
+        return false;
     }
 
     public NMSAdapter getNMSAdapter() {

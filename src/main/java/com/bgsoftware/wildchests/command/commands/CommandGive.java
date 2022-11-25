@@ -5,12 +5,11 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.ItemUtils;
-import cz.devfire.bantidupe.AntiDupe;
+import cz.devfire.bcore.Spigot.Hooks.Check;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import cz.basicland.bantidupe.bAntiDupe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,14 +72,17 @@ public final class CommandGive implements ICommand {
                 return;
             }
         }
+
         int amount = chestItem.getAmount();
         if (amount == 1) {
-            ItemUtils.addItem(bAntiDupe.getApi() == null ? AntiDupe.getApi() == null ? chestItem : AntiDupe.getApi().saveItem(chestItem) : bAntiDupe.getApi().addUniqueId(chestItem), target.getInventory(), target.getLocation());
+            Check.add(chestItem);
+            ItemUtils.addItem(chestItem, target.getInventory(), target.getLocation());
         } else {
             while (amount > 0) {
                 ItemStack item = new ItemStack(chestItem);
                 item.setAmount(1);
-                ItemUtils.addItem(bAntiDupe.getApi() == null ? AntiDupe.getApi() == null ? item : AntiDupe.getApi().saveItem(item) : bAntiDupe.getApi().addUniqueId(item), target.getInventory(), target.getLocation());
+                Check.add(item);
+                ItemUtils.addItem(item, target.getInventory(), target.getLocation());
                 amount--;
             }
         }

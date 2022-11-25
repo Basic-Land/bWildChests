@@ -5,11 +5,7 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.utils.ItemUtils;
-import cz.basicland.bantidupe.bAntiDupe;
-import cz.basicland.bantidupe.bAntiDupeAPI;
-import cz.devfire.bantidupe.AntiDupe;
-import cz.devfire.bantidupe.AntiDupeAPI;
-import org.bukkit.Bukkit;
+import cz.devfire.bcore.Spigot.Hooks.Check;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -66,59 +62,12 @@ public final class BlockListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        if (Bukkit.getPluginManager().isPluginEnabled("bAntiDupe")) {
-            ItemStack itemStack = e.getItemInHand();
-            Player player = e.getPlayer();
-            try {
-                bAntiDupeAPI api = bAntiDupe.getApi();
-                if (api.isDuped(itemStack)) {
-                    e.setCancelled(true);
-                    api.warnPlayer(player);
-                    api.removeUniqueId(itemStack, false);
-                    ItemStack itemStack1 = player.getInventory().getItemInMainHand();
-                    if (player.getGameMode() != GameMode.CREATIVE) itemStack1.setAmount(itemStack1.getAmount() + 1);
 
-                    if (itemStack.equals(player.getInventory().getItemInMainHand())) {
-                        api.logRemoval(player.getName(), player.getInventory().getItemInMainHand());
-                        player.getInventory().remove(player.getInventory().getItemInMainHand());
-                    }
-
-                    itemStack1 = player.getInventory().getItemInOffHand();
-                    if (player.getGameMode() != GameMode.CREATIVE) itemStack1.setAmount(itemStack1.getAmount() + 1);
-                    if (itemStack.equals(player.getInventory().getItemInOffHand())) {
-                        api.logRemoval(player.getName(), player.getInventory().getItemInOffHand());
-                        player.getInventory().setItemInOffHand(null);
-                    }
-                    return;
-                }
-
-                api.removeUniqueId(itemStack, false);
-
-            } catch (Exception ex) {
-                AntiDupeAPI api = AntiDupe.getApi();
-
-                if (api.isDuped(itemStack)) {
-                    e.setCancelled(true);
-                    api.warnPlayer(player);
-                    api.removeItem(itemStack);
-                    ItemStack itemStack1 = player.getInventory().getItemInMainHand();
-                    if (player.getGameMode() != GameMode.CREATIVE) itemStack1.setAmount(itemStack1.getAmount() + 1);
-
-                    if (itemStack.equals(player.getInventory().getItemInMainHand())) {
-                        player.getInventory().remove(player.getInventory().getItemInMainHand());
-                    }
-
-                    itemStack1 = player.getInventory().getItemInOffHand();
-                    if (player.getGameMode() != GameMode.CREATIVE) itemStack1.setAmount(itemStack1.getAmount() + 1);
-                    if (itemStack.equals(player.getInventory().getItemInOffHand())) {
-                        player.getInventory().setItemInOffHand(null);
-                    }
-                    return;
-                }
-
-                api.removeItem(itemStack);
-            }
+        if (Check.dupe(e.getItemInHand(), e.getPlayer())) {
+            e.setCancelled(true);
+            return;
         }
+
         Chest chest = plugin.getChestsManager().addChest(e.getPlayer().getUniqueId(), e.getBlockPlaced().getLocation(), chestData);
 
         plugin.getProviders().notifyChestPlaceListeners(chest);
@@ -140,7 +89,8 @@ public final class BlockListener implements Listener {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             ChestData chestData = chest.getData();
             ItemStack chestItem = chestData.getItemStack();
-            ItemUtils.dropOrCollect(e.getPlayer(), bAntiDupe.getApi() == null ? AntiDupe.getApi() == null ? chestItem : AntiDupe.getApi().saveItem(chestItem) : bAntiDupe.getApi().addUniqueId(chestItem), chestData.isAutoCollect(), chest.getLocation());
+            Check.add(chestItem);
+            ItemUtils.dropOrCollect(e.getPlayer(), chestItem, chestData.isAutoCollect(), chest.getLocation());
         }
 
         chest.onBreak(e);

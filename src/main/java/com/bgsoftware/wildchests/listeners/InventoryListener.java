@@ -45,6 +45,7 @@ public final class InventoryListener implements Listener {
 
     private final Map<UUID, ItemStack> latestClickedItem = new HashMap<>();
     private final String[] inventoryTitles = new String[]{"Expand Confirmation",};
+
     public InventoryListener(WildChestsPlugin plugin) {
         this.plugin = plugin;
         initGUIConfirm();

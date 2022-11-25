@@ -56,7 +56,7 @@ public class WildInventory implements IInventory {
         return splitStack(slot, 1, false);
     }
 
-    private ItemStack splitStack(int slot, int amount, boolean update){
+    private ItemStack splitStack(int slot, int amount, boolean update) {
         ItemStack stack = this.getItem(slot);
         if (stack == ItemStack.b) {
             return stack;
@@ -70,7 +70,7 @@ public class WildInventory implements IInventory {
                 stack.subtract(amount);
             }
 
-            if(update)
+            if (update)
                 this.update();
 
             return result;
@@ -81,14 +81,14 @@ public class WildInventory implements IInventory {
         setItem(i, itemStack, true);
     }
 
-    public void setItem(int i, ItemStack itemStack, boolean setItemFunction){
+    public void setItem(int i, ItemStack itemStack, boolean setItemFunction) {
         setItem(i, new WildItemStack<>(itemStack, CraftItemStack.asCraftMirror(itemStack)), setItemFunction);
     }
 
-    public void setItem(int i, WildItemStack<?, ?> wildItemStack, boolean setItemFunction){
+    public void setItem(int i, WildItemStack<?, ?> wildItemStack, boolean setItemFunction) {
         ItemStack itemstack = (ItemStack) wildItemStack.getItemStack();
 
-        if(setItemFunction && this.setItemFunction != null){
+        if (setItemFunction && this.setItemFunction != null) {
             this.setItemFunction.accept(i, itemstack);
             return;
         }
@@ -96,7 +96,7 @@ public class WildInventory implements IInventory {
         //noinspection unchecked
         WildItemStack<ItemStack, CraftItemStack> original = this.items.set(i, (WildItemStack<ItemStack, CraftItemStack>) wildItemStack);
 
-        if(!ItemStack.matches(original.getItemStack(), itemstack)) {
+        if (!ItemStack.matches(original.getItemStack(), itemstack)) {
             if (itemstack.isEmpty())
                 nonEmptyItems--;
             else
@@ -125,13 +125,13 @@ public class WildInventory implements IInventory {
 
     public NonNullList<ItemStack> getContents() {
         NonNullList<ItemStack> contents = NonNullList.a(this.items.size(), ItemStack.b);
-        for(int i = 0; i < contents.size(); i++)
+        for (int i = 0; i < contents.size(); i++)
             contents.set(i, getItem(i));
         return contents;
     }
 
     public void onOpen(CraftHumanEntity who) {
-        if(index != 0 && !((WChest) chest).getTileEntityContainer().getTransaction().contains(who))
+        if (index != 0 && !((WChest) chest).getTileEntityContainer().getTransaction().contains(who))
             throw new IllegalArgumentException("Opened directly page!");
     }
 
@@ -150,7 +150,7 @@ public class WildInventory implements IInventory {
     public List<HumanEntity> getViewers() {
         try {
             return new ArrayList<>(((WChest) chest).getTileEntityContainer().getTransaction());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return new ArrayList<>();
         }
     }
@@ -163,7 +163,7 @@ public class WildInventory implements IInventory {
         return true;
     }
 
-    public boolean isFull(){
+    public boolean isFull() {
         return nonEmptyItems == getSize();
     }
 
@@ -176,12 +176,12 @@ public class WildInventory implements IInventory {
         return nonEmptyItems <= 0;
     }
 
-    void setTitle(String title) {
-        this.title = title;
-    }
-
     String getTitle() {
         return title;
+    }
+
+    void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

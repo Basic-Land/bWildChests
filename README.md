@@ -19,6 +19,7 @@ You can find already compiled jars on our [Jenkins](https://hub.bg-software.com/
 When compiling you will receive errors about missing dependencies.<br>
 These dependencies are premium plugins that cannot be published on a public repository.<br>
 You can do either of the followings in order to solve it:
+
 - Add manually all the jar files of the premium plugins.
 - Purchase access to our private repository.
 - Disabling compiling of the modules of these dependencies in the `gradle.properties` file.
@@ -26,14 +27,19 @@ You can do either of the followings in order to solve it:
 <br>
 
 ##### Private Jars:
+
 - QuantumShop by NightExpress [[link]](https://www.spigotmc.org/resources/50696/)
 - ShopGUIPlus (v1.20 & v1.43) by brcdev [[link]](https://www.spigotmc.org/resources/6515/)
 
 ## API
 
-The plugin is packed with a rich API for interacting with chests and more. When hooking into the plugin, it's highly recommended to only use the API and not the compiled plugin, as the API methods are not only commented, but also will not get removed or changed unless they are marked as deprecated. This means that by using the API, you won't have to do any additional changes to your code between updates.
+The plugin is packed with a rich API for interacting with chests and more. When hooking into the plugin, it's highly
+recommended to only use the API and not the compiled plugin, as the API methods are not only commented, but also will
+not get removed or changed unless they are marked as deprecated. This means that by using the API, you won't have to do
+any additional changes to your code between updates.
 
 ##### Maven
+
 ```
 <repositories>
     <repository>
@@ -50,7 +56,9 @@ The plugin is packed with a rich API for interacting with chests and more. When 
     </dependency>
 </dependencies>
 ```
+
 ##### Gradle
+
 ```
 repositories {
     maven { url 'https://repo.bg-software.com/repository/api/' }
@@ -63,9 +71,9 @@ dependencies {
 
 ## Updates
 
-This plugin is provided "as is", which means no updates or new features are guaranteed. We will do our best to keep 
+This plugin is provided "as is", which means no updates or new features are guaranteed. We will do our best to keep
 updating and pushing new updates, and you are more than welcome to contribute your time as well and make pull requests
-for bug fixes. 
+for bug fixes.
 
 ## License
 

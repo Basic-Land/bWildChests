@@ -18,6 +18,7 @@ public interface StorageChest extends RegularChest, Chest {
 
     /**
      * Change the item that is stored in this chest.
+     *
      * @param itemStack The new item to store.
      */
     void setItemStack(ItemStack itemStack);
@@ -28,25 +29,28 @@ public interface StorageChest extends RegularChest, Chest {
     BigInteger getAmount();
 
     /**
-     * Get the amount of the stored item.
-     * @deprecated Use getAmount()
-     */
-    @Deprecated
-    BigInteger getExactAmount();
-
-    /**
      * Set the amount of the stored item.
+     *
      * @param amount The new amount of the item.
      */
     void setAmount(BigInteger amount);
 
     /**
      * Set the amount of the stored item.
+     *
      * @param amount The new amount of the item.
      * @deprecated Use setAmount(BigInteger amount)
      */
     @Deprecated
     void setAmount(int amount);
+
+    /**
+     * Get the amount of the stored item.
+     *
+     * @deprecated Use getAmount()
+     */
+    @Deprecated
+    BigInteger getExactAmount();
 
     /**
      * Get the maximum amount that can be stored.
@@ -56,6 +60,7 @@ public interface StorageChest extends RegularChest, Chest {
 
     /**
      * Set the maximum amount of the item that can be stored.
+     *
      * @param maxAmount The maximum amount
      */
     void setMaxAmount(BigInteger maxAmount);

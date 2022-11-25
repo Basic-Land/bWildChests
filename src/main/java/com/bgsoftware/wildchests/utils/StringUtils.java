@@ -13,8 +13,7 @@ public final class StringUtils {
     public static String format(BigDecimal bigDecimal) {
         String s = numberFormatter.format(Double.parseDouble(bigDecimal.toString()));
         return s.endsWith(".00") ? s.replace(".00", "") : s;
-    }    private static final BigDecimal K = BigDecimal.valueOf(1000), M = K.multiply(K), B = M.multiply(K),
-            T = B.multiply(K), Q = T.multiply(K);
+    }
 
     public static String fancyFormat(BigDecimal bigDecimal) {
         if (bigDecimal.compareTo(Q) >= 0)
@@ -33,7 +32,9 @@ public final class StringUtils {
             return format(bigDecimal.divide(K, 2, RoundingMode.HALF_UP)) + Locale.FORMAT_THOUSANDS.getMessage();
 
         return format(bigDecimal);
-    }
+    }    private static final BigDecimal K = BigDecimal.valueOf(1000), M = K.multiply(K), B = M.multiply(K),
+            T = B.multiply(K), Q = T.multiply(K);
+
 
 
 

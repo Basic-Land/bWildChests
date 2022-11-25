@@ -6,11 +6,11 @@ import java.util.List;
  * LinkedChests are regular chests that can be linked into other linked chests.
  * It means that all of their stats and contents will be synced with their linked chests.
  */
-public interface LinkedChest extends RegularChest, Chest{
+public interface LinkedChest extends RegularChest, Chest {
 
     /**
      * Link this chest into another chest.
-     *
+     * <p>
      * If the target link is not linked to any chests,
      * this chest will be the source chest, and the other chests will link into this chest.
      * Otherwise, this chest will be linked into the source chest of the target chest.

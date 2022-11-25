@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public final class PricesProvider_CMI implements PricesProvider {
 
-    public PricesProvider_CMI(){
+    public PricesProvider_CMI() {
         WildChestsPlugin.log(" - Using CMI as PricesProvider.");
     }
 
