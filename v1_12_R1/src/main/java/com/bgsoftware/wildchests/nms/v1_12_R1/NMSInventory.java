@@ -3,10 +3,24 @@ package com.bgsoftware.wildchests.nms.v1_12_R1;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
-import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.*;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.CraftWildInventory;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.TileEntityWildChest;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.WildContainerChest;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.WildContainerHopper;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.WildContainerItemImpl;
+import com.bgsoftware.wildchests.nms.v1_12_R1.inventory.WildInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
-import com.bgsoftware.wildchests.objects.inventory.WildItemStack;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.ChatComponentText;
+import net.minecraft.server.v1_12_R1.Container;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.ItemStack;
+import net.minecraft.server.v1_12_R1.NBTTagByte;
+import net.minecraft.server.v1_12_R1.PacketPlayOutOpenWindow;
+import net.minecraft.server.v1_12_R1.PlayerInventory;
+import net.minecraft.server.v1_12_R1.TileEntity;
+import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
@@ -18,19 +32,6 @@ import org.bukkit.entity.Player;
 public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInventory {
 
     private static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
-
-    public static Container createContainer(PlayerInventory playerInventory, EntityHuman entityHuman, com.bgsoftware.wildchests.objects.inventory.CraftWildInventory craftWildInventory) {
-        WildInventory inventory = ((CraftWildInventory) craftWildInventory).getInventory();
-        return inventory.getSize() == 5 ? WildContainerHopper.of(playerInventory, entityHuman, inventory) :
-                WildContainerChest.of(playerInventory, entityHuman, inventory);
-    }
-
-    private static TileEntityWildChest getTileEntity(Chest chest) {
-        Location loc = chest.getLocation();
-        World world = ((CraftWorld) loc.getWorld()).getHandle();
-        BlockPosition blockPosition = new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        return (TileEntityWildChest) world.getTileEntity(blockPosition);
-    }
 
     @Override
     public void updateTileEntity(Chest chest) {
@@ -62,9 +63,8 @@ public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInve
     }
 
     @Override
-    public WildItemStack<?, ?> createItemStack(org.bukkit.inventory.ItemStack itemStack) {
-        ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-        return new WildItemStack<>(nmsItem, CraftItemStack.asCraftMirror(nmsItem));
+    public WildContainerItemImpl createItemStack(org.bukkit.inventory.ItemStack itemStack) {
+        return new WildContainerItemImpl(CraftItemStack.asNMSCopy(itemStack));
     }
 
     @Override
@@ -106,6 +106,19 @@ public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInve
         inventory.setItem(1, designItem, false);
         inventory.setItem(3, designItem, false);
         inventory.setItem(4, designItem, false);
+    }
+
+    public static Container createContainer(PlayerInventory playerInventory, EntityHuman entityHuman, com.bgsoftware.wildchests.objects.inventory.CraftWildInventory craftWildInventory) {
+        WildInventory inventory = ((CraftWildInventory) craftWildInventory).getInventory();
+        return inventory.getSize() == 5 ? WildContainerHopper.of(playerInventory, entityHuman, inventory) :
+                WildContainerChest.of(playerInventory, entityHuman, inventory);
+    }
+
+    private static TileEntityWildChest getTileEntity(Chest chest) {
+        Location loc = chest.getLocation();
+        World world = ((CraftWorld) loc.getWorld()).getHandle();
+        BlockPosition blockPosition = new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        return (TileEntityWildChest) world.getTileEntity(blockPosition);
     }
 
 }

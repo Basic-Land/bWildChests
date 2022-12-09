@@ -1,6 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_12_R1.inventory;
 
 import com.bgsoftware.wildchests.listeners.InventoryListener;
+import com.bgsoftware.wildchests.nms.v1_12_R1.NMSInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.server.v1_12_R1.Container;
 import net.minecraft.server.v1_12_R1.ContainerChest;
@@ -14,19 +15,15 @@ public class WildContainerChest extends ContainerChest {
     private final WildInventory inventory;
     private CraftInventoryView bukkitEntity;
 
-    private WildContainerChest(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
+    private WildContainerChest(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory){
         super(playerInventory, inventory, entityHuman);
         this.playerInventory = playerInventory;
         this.inventory = inventory;
     }
 
-    public static Container of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
-        return new WildContainerChest(playerInventory, entityHuman, inventory);
-    }
-
     @Override
     public CraftInventoryView getBukkitView() {
-        if (bukkitEntity == null) {
+        if(bukkitEntity == null) {
             CraftWildInventory inventory = new CraftWildInventory(this.inventory);
             bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
         }
@@ -36,8 +33,12 @@ public class WildContainerChest extends ContainerChest {
 
     @Override
     public void b(EntityHuman entityhuman) {
-        if (!InventoryListener.buyNewPage.containsKey(entityhuman.getUniqueID()))
+        if(!InventoryListener.buyNewPage.containsKey(entityhuman.getUniqueID()))
             ((TileEntityWildChest) ((WChest) inventory.chest).getTileEntityContainer()).closeContainer(entityhuman);
+    }
+
+    public static Container of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory){
+        return new WildContainerChest(playerInventory, entityHuman, inventory);
     }
 
 }

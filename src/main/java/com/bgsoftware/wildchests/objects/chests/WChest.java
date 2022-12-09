@@ -11,7 +11,7 @@ import com.bgsoftware.wildchests.listeners.InventoryListener;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
-import com.bgsoftware.wildchests.objects.inventory.WildItemStack;
+import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import com.bgsoftware.wildchests.utils.ItemUtils;
 import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
@@ -100,16 +100,16 @@ public abstract class WChest extends DatabaseObject implements Chest {
 
     @Override
     public ItemStack[] getContents() {
-        WildItemStack<?, ?>[] originalContents = getWildContents();
-        ItemStack[] contents = new ItemStack[originalContents.length];
+        List<WildContainerItem> originalContents = getWildContents();
+        ItemStack[] contents = new ItemStack[originalContents.size()];
 
         for (int i = 0; i < contents.length; i++)
-            contents[i] = originalContents[i].getCraftItemStack();
+            contents[i] = originalContents.get(i).getBukkitItem();
 
         return contents;
     }
 
-    public abstract WildItemStack<?, ?>[] getWildContents();
+    public abstract List<WildContainerItem> getWildContents();
 
     @Override
     public Map<Integer, ItemStack> addItems(ItemStack... itemStacks) {
@@ -162,17 +162,17 @@ public abstract class WChest extends DatabaseObject implements Chest {
 
     @Override
     public ItemStack getItem(int i) {
-        return getWildItem(i).getCraftItemStack();
+        return getWildItem(i).getBukkitItem();
     }
 
-    public abstract WildItemStack<?, ?> getWildItem(int i);
+    public abstract WildContainerItem getWildItem(int i);
 
     @Override
     public void setItem(int i, ItemStack itemStack) {
-        setItem(i, WildItemStack.of(itemStack));
+        setItem(i, plugin.getNMSInventory().createItemStack(itemStack));
     }
 
-    public abstract void setItem(int i, WildItemStack<?, ?> itemStack);
+    public abstract void setItem(int i, WildContainerItem itemStack);
 
     @Override
     public abstract Inventory getPage(int page);

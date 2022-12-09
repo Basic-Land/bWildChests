@@ -1,5 +1,6 @@
 package com.bgsoftware.wildchests.nms.v1_12_R1.inventory;
 
+import com.bgsoftware.wildchests.nms.v1_12_R1.NMSInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.server.v1_12_R1.ContainerHopper;
 import net.minecraft.server.v1_12_R1.EntityHuman;
@@ -12,19 +13,15 @@ public class WildContainerHopper extends ContainerHopper {
     private final WildInventory inventory;
     private CraftInventoryView bukkitEntity;
 
-    private WildContainerHopper(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
+    private WildContainerHopper(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory){
         super(playerInventory, inventory, entityHuman);
         this.playerInventory = playerInventory;
         this.inventory = inventory;
     }
 
-    public static WildContainerHopper of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
-        return new WildContainerHopper(playerInventory, entityHuman, inventory);
-    }
-
     @Override
     public CraftInventoryView getBukkitView() {
-        if (bukkitEntity == null) {
+        if(bukkitEntity == null) {
             CraftWildInventory inventory = new CraftWildInventory(this.inventory);
             bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
         }
@@ -35,6 +32,10 @@ public class WildContainerHopper extends ContainerHopper {
     @Override
     public void b(EntityHuman entityhuman) {
         ((TileEntityWildChest) ((WChest) inventory.chest).getTileEntityContainer()).closeContainer(entityhuman);
+    }
+
+    public static WildContainerHopper of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory){
+        return new WildContainerHopper(playerInventory, entityHuman, inventory);
     }
 
 }

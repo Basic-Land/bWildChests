@@ -8,10 +8,30 @@ import com.bgsoftware.wildchests.nms.v1_8_R3.NMSInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.chests.WStorageChest;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
-import com.bgsoftware.wildchests.objects.inventory.WildItemStack;
+import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import com.bgsoftware.wildchests.utils.ChestUtils;
 import com.google.common.base.Predicate;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.AxisAlignedBB;
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.Blocks;
+import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.Container;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityHuman;
+import net.minecraft.server.v1_8_R3.EntityItem;
+import net.minecraft.server.v1_8_R3.EnumDirection;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IUpdatePlayerListBox;
+import net.minecraft.server.v1_8_R3.IWorldInventory;
+import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.PlayerInventory;
+import net.minecraft.server.v1_8_R3.TileEntity;
+import net.minecraft.server.v1_8_R3.TileEntityChest;
+import net.minecraft.server.v1_8_R3.World;
+import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftItem;
@@ -49,21 +69,21 @@ public class TileEntityWildChest extends TileEntityChest implements IWorldInvent
 
     @Override
     public void setItem(int i, ItemStack itemStack) {
-        ((WChest) chest).setItem(i, new WildItemStack<>(itemStack, CraftItemStack.asCraftMirror(itemStack)));
+        ((WChest) chest).setItem(i, new WildContainerItemImpl(itemStack));
     }
 
     @Override
     public ItemStack getItem(int i) {
-        return (ItemStack) ((WChest) chest).getWildItem(i).getItemStack();
+        return ((WildContainerItemImpl) ((WChest) chest).getWildItem(i)).getHandle();
     }
 
     @Override
     public ItemStack[] getContents() {
-        WildItemStack<?, ?>[] contents = ((WChest) chest).getWildContents();
-        ItemStack[] newContents = new ItemStack[contents.length];
+        List<WildContainerItem> contents = ((WChest) chest).getWildContents();
+        ItemStack[] newContents = new ItemStack[contents.size()];
 
-        for (int i = 0; i < contents.length; i++)
-            newContents[i] = (ItemStack) contents[i].getItemStack();
+        for (int i = 0; i < newContents.length; i++)
+            newContents[i] = ((WildContainerItemImpl) contents.get(i)).getHandle();
 
         return newContents;
     }
@@ -274,7 +294,7 @@ public class TileEntityWildChest extends TileEntityChest implements IWorldInvent
     @Override
     public ItemStack splitStack(int slot, int amount) {
         return slot != -2 || !(chest instanceof StorageChest) ? splitItem(slot, amount) :
-                (ItemStack) ((WStorageChest) chest).splitItem(amount).getItemStack();
+                ((WildContainerItemImpl) ((WStorageChest) chest).splitItem(amount)).getHandle();
     }
 
     @Override

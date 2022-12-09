@@ -20,6 +20,22 @@ public class WildChestMenu extends ChestMenu {
         this.inventory = inventory;
     }
 
+    @Override
+    public CraftInventoryView getBukkitView() {
+        if (bukkitEntity == null) {
+            CraftWildInventoryImpl inventory = new CraftWildInventoryImpl(this.inventory);
+            bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
+        }
+
+        return bukkitEntity;
+    }
+
+    @Override
+    public void removed(Player player) {
+        if (!InventoryListener.buyNewPage.containsKey(player.getUUID()))
+            ((WildChestBlockEntity) ((WChest) inventory.chest).getTileEntityContainer()).stopOpen(player);
+    }
+
     public static WildChestMenu of(int id, Inventory playerInventory, WildContainer inventory) {
         MenuType<?> menuType;
         int rows;
@@ -55,22 +71,6 @@ public class WildChestMenu extends ChestMenu {
         }
 
         return new WildChestMenu(menuType, id, playerInventory, inventory, rows);
-    }
-
-    @Override
-    public CraftInventoryView getBukkitView() {
-        if (bukkitEntity == null) {
-            CraftWildInventoryImpl inventory = new CraftWildInventoryImpl(this.inventory);
-            bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
-        }
-
-        return bukkitEntity;
-    }
-
-    @Override
-    public void removed(Player player) {
-        if (!InventoryListener.buyNewPage.containsKey(player.getUUID()))
-            ((WildChestBlockEntity) ((WChest) inventory.chest).getTileEntityContainer()).stopOpen(player);
     }
 
 }

@@ -18,10 +18,6 @@ public class WildContainerHopper extends ContainerHopper {
         this.inventory = inventory;
     }
 
-    public static WildContainerHopper of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
-        return new WildContainerHopper(playerInventory, entityHuman, inventory);
-    }
-
     @Override
     public CraftInventoryView getBukkitView() {
         if (bukkitEntity == null) {
@@ -35,6 +31,10 @@ public class WildContainerHopper extends ContainerHopper {
     @Override
     public void b(EntityHuman entityhuman) {
         ((TileEntityWildChest) ((WChest) inventory.chest).getTileEntityContainer()).closeContainer(entityhuman);
+    }
+
+    public static WildContainerHopper of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
+        return new WildContainerHopper(playerInventory, entityHuman, inventory);
     }
 
 }

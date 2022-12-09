@@ -2,7 +2,15 @@ package com.bgsoftware.wildchests.nms.v1_16_R3;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
+import net.minecraft.server.v1_16_R3.NBTReadLimiter;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
+import net.minecraft.server.v1_16_R3.NBTTagList;
+import net.minecraft.server.v1_16_R3.TileEntityChest;
+import net.minecraft.server.v1_16_R3.World;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -11,41 +19,16 @@ import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.math.BigInteger;
 import java.util.Base64;
 
 @SuppressWarnings({"unused", "ConstantConditions"})
 public final class NMSAdapter implements com.bgsoftware.wildchests.nms.NMSAdapter {
-
-    private static void serialize(Inventory inventory, NBTTagCompound tagCompound) {
-        NBTTagList itemsList = new NBTTagList();
-        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
-
-        for (int i = 0; i < items.length; ++i) {
-            if (items[i] != null) {
-                NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte) i);
-                CraftItemStack.asNMSCopy(items[i]).save(nbtTagCompound);
-                itemsList.add(nbtTagCompound);
-            }
-        }
-
-        tagCompound.setInt("Size", inventory.getSize());
-        tagCompound.set("Items", itemsList);
-    }
-
-    private static InventoryHolder deserialize(NBTTagCompound tagCompound) {
-        InventoryHolder inventory = new InventoryHolder(tagCompound.getInt("Size"), "Chest");
-        NBTTagList itemsList = tagCompound.getList("Items", 10);
-
-        for (int i = 0; i < itemsList.size(); i++) {
-            NBTTagCompound nbtTagCompound = itemsList.getCompound(i);
-            inventory.setItem(nbtTagCompound.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.a(nbtTagCompound)));
-        }
-
-        return inventory;
-    }
 
     @Override
     public String serialize(org.bukkit.inventory.ItemStack itemStack) {
@@ -192,6 +175,35 @@ public final class NMSAdapter implements com.bgsoftware.wildchests.nms.NMSAdapte
         NBTTagCompound tagCompound = nmsItem.getOrCreateTag();
         tagCompound.setString(key, value);
         return CraftItemStack.asCraftMirror(nmsItem);
+    }
+
+    private static void serialize(Inventory inventory, NBTTagCompound tagCompound) {
+        NBTTagList itemsList = new NBTTagList();
+        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
+
+        for (int i = 0; i < items.length; ++i) {
+            if (items[i] != null) {
+                NBTTagCompound nbtTagCompound = new NBTTagCompound();
+                nbtTagCompound.setByte("Slot", (byte) i);
+                CraftItemStack.asNMSCopy(items[i]).save(nbtTagCompound);
+                itemsList.add(nbtTagCompound);
+            }
+        }
+
+        tagCompound.setInt("Size", inventory.getSize());
+        tagCompound.set("Items", itemsList);
+    }
+
+    private static InventoryHolder deserialize(NBTTagCompound tagCompound) {
+        InventoryHolder inventory = new InventoryHolder(tagCompound.getInt("Size"), "Chest");
+        NBTTagList itemsList = tagCompound.getList("Items", 10);
+
+        for (int i = 0; i < itemsList.size(); i++) {
+            NBTTagCompound nbtTagCompound = itemsList.getCompound(i);
+            inventory.setItem(nbtTagCompound.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.a(nbtTagCompound)));
+        }
+
+        return inventory;
     }
 
 }

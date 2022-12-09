@@ -1,6 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_8_R3.inventory;
 
 import com.bgsoftware.wildchests.listeners.InventoryListener;
+import com.bgsoftware.wildchests.nms.v1_8_R3.NMSInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.server.v1_8_R3.Container;
 import net.minecraft.server.v1_8_R3.ContainerChest;
@@ -20,10 +21,6 @@ public class WildContainerChest extends ContainerChest {
         this.inventory = inventory;
     }
 
-    public static Container of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
-        return new WildContainerChest(playerInventory, entityHuman, inventory);
-    }
-
     @Override
     public CraftInventoryView getBukkitView() {
         if (bukkitEntity == null) {
@@ -38,6 +35,10 @@ public class WildContainerChest extends ContainerChest {
     public void b(EntityHuman entityhuman) {
         if (!InventoryListener.buyNewPage.containsKey(entityhuman.getUniqueID()))
             ((TileEntityWildChest) ((WChest) inventory.chest).getTileEntityContainer()).closeContainer(entityhuman);
+    }
+
+    public static Container of(PlayerInventory playerInventory, EntityHuman entityHuman, WildInventory inventory) {
+        return new WildContainerChest(playerInventory, entityHuman, inventory);
     }
 
 }
