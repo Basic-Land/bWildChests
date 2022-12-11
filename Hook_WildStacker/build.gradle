@@ -1,8 +1,8 @@
 group 'Hook_WildStacker'
 
 dependencies {
-    compileOnly "com.bgsoftware:WildStackerAPI:3.6.1"
-    compileOnly "com.bgsoftware:wildstacker:3.8.1:b341"
+    compileOnly "com.bgsoftware:wildstacker-api:41"
+    compileOnly "com.bgsoftware:wildstacker:2022.6"
     compileOnly "org.spigotmc:v1_16_R3:latest"
     compileOnly project(":API")
     compileOnly parent
