@@ -68,7 +68,7 @@ dependencies {
     // Spigot jars
     compileOnly "org.spigotmc:v1_8_R1:latest"
     compileOnly 'org.spigotmc:v1_16_R3-Tuinity:latest'
-    compileOnly 'cz.devfire:bcore:4.5.11'
+    compileOnly fileTree(dir: 'lib', include: ['*.jar'])
 }
 
 jar {
