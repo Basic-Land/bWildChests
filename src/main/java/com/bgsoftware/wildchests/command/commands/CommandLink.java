@@ -73,7 +73,7 @@ public final class CommandLink implements ICommand {
 
         Block targetBlock = player.getTargetBlock(TRANSPARENT_TYPES, 5);
 
-        if (targetBlock == null || targetBlock.getType() != Material.CHEST) {
+        if (targetBlock.getType() != Material.CHEST) {
             Locale.INVALID_BLOCK_CHEST.send(player);
             return;
         }
