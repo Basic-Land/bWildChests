@@ -40,13 +40,13 @@ public class CraftWildInventoryImpl extends CraftInventory implements CraftWildI
     }
 
     @Override
-    public void setTitle(String title) {
-        getInventory().setTitle(title);
+    public String getTitle() {
+        return getInventory().getTitle();
     }
 
     @Override
-    public String getTitle() {
-        return getInventory().getTitle();
+    public void setTitle(String title) {
+        getInventory().setTitle(title);
     }
 
     @Override

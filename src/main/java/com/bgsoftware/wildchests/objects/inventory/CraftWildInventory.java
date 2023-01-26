@@ -2,7 +2,6 @@ package com.bgsoftware.wildchests.objects.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 

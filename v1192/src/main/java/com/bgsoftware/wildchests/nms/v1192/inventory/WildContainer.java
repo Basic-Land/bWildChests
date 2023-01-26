@@ -190,12 +190,12 @@ public class WildContainer implements Container {
         return nonEmptyItems <= 0;
     }
 
-    void setTitle(String title) {
-        this.title = title;
-    }
-
     String getTitle() {
         return title;
+    }
+
+    void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

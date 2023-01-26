@@ -7,7 +7,9 @@ import com.bgsoftware.wildchests.api.hooks.PricesProvider;
 import com.bgsoftware.wildchests.api.hooks.StackerProvider;
 import com.bgsoftware.wildchests.api.objects.DepositMethod;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
+import com.bgsoftware.wildchests.hooks.PricesProviderType;
 import com.bgsoftware.wildchests.hooks.PricesProvider_Default;
+import com.bgsoftware.wildchests.hooks.StackerProviderType;
 import com.bgsoftware.wildchests.hooks.StackerProvider_Default;
 import com.bgsoftware.wildchests.hooks.listener.IChestBreakListener;
 import com.bgsoftware.wildchests.hooks.listener.IChestPlaceListener;
@@ -168,50 +170,29 @@ public final class ProvidersHandler implements ProvidersManager {
 
         Optional<PricesProvider> pricesProvider = Optional.empty();
 
-        switch (plugin.getSettings().pricesProvider.toUpperCase()) {
-            case "CMI":
-                if (Bukkit.getPluginManager().isPluginEnabled("CMI")) {
-                    pricesProvider = createInstance("PricesProvider_CMI");
-                }
-                break;
-            case "SHOPGUIPLUS":
-                if (Bukkit.getPluginManager().isPluginEnabled("ShopGUIPlus")) {
-                    Plugin shopGUIPlus = Bukkit.getPluginManager().getPlugin("ShopGUIPlus");
-                    if (shopGUIPlus.getDescription().getVersion().startsWith("1.2")) {
-                        pricesProvider = createInstance("PricesProvider_ShopGUIPlus12");
-                    } else try {
-                        Class.forName("net.brcdev.shopgui.shop.item.ShopItem");
-                        pricesProvider = createInstance("PricesProvider_ShopGUIPlus78");
-                    } catch (ClassNotFoundException error) {
-                        pricesProvider = createInstance("PricesProvider_ShopGUIPlus14");
-                    }
-                }
-                break;
-            case "QUANTUMSHOP":
-                if (Bukkit.getPluginManager().isPluginEnabled("QuantumShop")) {
-                    pricesProvider = createInstance("PricesProvider_QuantumShop");
-                }
-                break;
-            case "ESSENTIALS":
-                if (Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
-                    pricesProvider = createInstance("PricesProvider_Essentials");
-                }
-                break;
-            case "ZSHOP":
-                if (Bukkit.getPluginManager().isPluginEnabled("zShop")) {
-                    pricesProvider = createInstance("PricesProvider_zShop");
-                }
-                break;
-            case "ECONOMYSHOPGUI":
-                if (Bukkit.getPluginManager().isPluginEnabled("EconomyShopGUI") ||
-                        Bukkit.getPluginManager().isPluginEnabled("EconomyShopGUI-Premium")) {
-                    pricesProvider = createInstance("PricesProvider_EconomyShopGUI");
-                }
-                break;
+        PricesProviderType pricesProviderType = plugin.getSettings().pricesProvider;
+
+        if (pricesProviderType == PricesProviderType.WILDCHESTS) {
+            WildChestsPlugin.log("- Couldn't default prices provider.");
+            return; // Return early, no need to do any checks.
         }
 
+        boolean autoDetection = pricesProviderType == PricesProviderType.AUTO;
+
+        if ((autoDetection || pricesProviderType == PricesProviderType.SHOPGUIPLUS) && Bukkit.getPluginManager().isPluginEnabled("ShopGUIPlus")) {
+            Plugin shopGUIPlus = Bukkit.getPluginManager().getPlugin("ShopGUIPlus");
+            try {
+                Class.forName("net.brcdev.shopgui.shop.item.ShopItem");
+                pricesProvider = createInstance("PricesProvider_ShopGUIPlus78");
+            } catch (ClassNotFoundException error) {
+                pricesProvider = createInstance("PricesProvider_ShopGUIPlus14");
+            }
+        } else if ((autoDetection || pricesProviderType == PricesProviderType.CMI) &&
+                Bukkit.getPluginManager().isPluginEnabled("CMI")) {
+            pricesProvider = createInstance("PricesProvider_CMI");
+        }
         if (!pricesProvider.isPresent()) {
-            WildChestsPlugin.log("- Couldn''t find any prices providers, using default one");
+            WildChestsPlugin.log("- Couldn't find any prices providers, using default one");
             return;
         }
 
@@ -222,10 +203,17 @@ public final class ProvidersHandler implements ProvidersManager {
         if (!(stackerProvider instanceof StackerProvider_Default))
             return;
 
-        if (Bukkit.getPluginManager().isPluginEnabled("WildStacker")) {
-            Optional<StackerProvider> stackerProvider = createInstance("StackerProvider_WildStacker");
-            stackerProvider.ifPresent(this::setStackerProvider);
+        Optional<StackerProvider> stackerProvider = Optional.empty();
+
+        StackerProviderType stackerProviderType = plugin.getSettings().stackerProvider;
+        boolean autoDetection = stackerProviderType == StackerProviderType.AUTO;
+
+        if ((autoDetection || stackerProviderType == StackerProviderType.WILDSTACKER) &&
+                Bukkit.getPluginManager().isPluginEnabled("WildStacker")) {
+            stackerProvider = createInstance("StackerProvider_WildStacker");
         }
+
+        stackerProvider.ifPresent(this::setStackerProvider);
     }
 
     private void registerBanksProvider() {

@@ -173,12 +173,12 @@ public class WildInventory implements IInventory {
         return nonEmptyItems <= 0;
     }
 
-    void setTitle(String title) {
-        this.title = title;
-    }
-
     String getTitle() {
         return title;
+    }
+
+    void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

@@ -18,6 +18,10 @@ public class WildHopperMenu extends HopperMenu {
         this.inventory = inventory;
     }
 
+    public static WildHopperMenu of(int id, Inventory playerInventory, WildContainer inventory) {
+        return new WildHopperMenu(id, playerInventory, inventory);
+    }
+
     @Override
     public CraftInventoryView getBukkitView() {
         if (bukkitEntity == null) {
@@ -31,10 +35,6 @@ public class WildHopperMenu extends HopperMenu {
     @Override
     public void removed(Player player) {
         ((WildChestBlockEntity) ((WChest) inventory.chest).getTileEntityContainer()).stopOpen(player);
-    }
-
-    public static WildHopperMenu of(int id, Inventory playerInventory, WildContainer inventory) {
-        return new WildHopperMenu(id, playerInventory, inventory);
     }
 
 }
