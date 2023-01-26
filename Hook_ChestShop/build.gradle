@@ -1,7 +1,7 @@
 group 'Hook_ChestShop'
 
 dependencies {
-    compileOnly "com.acrobot:ChestShop:3.11"
+    compileOnly "com.Acrobot:ChestShop:3.12.2-b358"
     compileOnly "org.spigotmc:v1_16_R3:latest"
     compileOnly project(":API")
     compileOnly parent
