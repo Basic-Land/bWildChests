@@ -9,9 +9,9 @@ public enum Materials {
     RED_STAINED_GLASS_PANE("STAINED_GLASS_PANE", 14),
     BLACK_STAINED_GLASS_PANE("STAINED_GLASS_PANE", 15);
 
-    private static final boolean isLegacy = isLegacy();
-    private final String legacyType;
-    private final byte legacyData;
+    private static boolean isLegacy = isLegacy();
+    private String legacyType;
+    private byte legacyData;
 
     Materials(String legacyType, int legacyData) {
         this.legacyType = legacyType;

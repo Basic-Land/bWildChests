@@ -12,7 +12,10 @@ import com.bgsoftware.wildchests.utils.SyncedArray;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class WRegularChest extends WChest implements RegularChest {
 
@@ -62,6 +65,7 @@ public class WRegularChest extends WChest implements RegularChest {
     @Override
     public List<WildContainerItem> getWildContents() {
         List<WildContainerItem> contents = new ArrayList<>();
+
         int pagesAmount = getPagesAmount();
 
         for (int page = 0; page < pagesAmount; page++) {

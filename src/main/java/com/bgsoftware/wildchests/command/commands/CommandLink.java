@@ -66,14 +66,16 @@ public final class CommandLink implements ICommand {
 
     @Override
     public void perform(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return;
         }
 
+        Player player = (Player) sender;
+
         Block targetBlock = player.getTargetBlock(TRANSPARENT_TYPES, 5);
 
-        if (targetBlock.getType() != Material.CHEST) {
+        if (targetBlock == null || targetBlock.getType() != Material.CHEST) {
             Locale.INVALID_BLOCK_CHEST.send(player);
             return;
         }
@@ -88,10 +90,12 @@ public final class CommandLink implements ICommand {
 
         Chest chest = plugin.getChestsManager().getChest(targetBlock.getLocation());
 
-        if (!(chest instanceof LinkedChest linkedChest)) {
+        if (!(chest instanceof LinkedChest)) {
             Locale.NOT_LINKED_CHEST.send(player);
             return;
         }
+
+        LinkedChest linkedChest = (LinkedChest) chest;
 
         if (players.containsKey(player.getUniqueId())) {
             LinkedChest originalChest = plugin.getChestsManager().getLinkedChest(players.get(player.getUniqueId()));

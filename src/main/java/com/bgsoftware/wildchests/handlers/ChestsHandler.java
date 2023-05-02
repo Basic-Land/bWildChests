@@ -23,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,16 +37,19 @@ public final class ChestsHandler implements ChestsManager {
     private final Map<ChunkPosition, Set<Chest>> chestsByChunks = Maps.newConcurrentMap();
 
     @Override
+    @Nullable
     public Chest getChest(Location location) {
         return getChest(location, RegularChest.class);
     }
 
     @Override
+    @Nullable
     public LinkedChest getLinkedChest(Location location) {
         return getChest(location, LinkedChest.class);
     }
 
     @Override
+    @Nullable
     public StorageChest getStorageChest(Location location) {
         return getChest(location, StorageChest.class);
     }
@@ -117,11 +121,13 @@ public final class ChestsHandler implements ChestsManager {
     }
 
     @Override
+    @Nullable
     public ChestData getChestData(String name) {
         return chestsData.get(name.toLowerCase());
     }
 
     @Override
+    @Nullable
     public ChestData getChestData(ItemStack itemStack) {
         String chestName = plugin.getNMSAdapter().getChestName(itemStack);
 
@@ -138,13 +144,14 @@ public final class ChestsHandler implements ChestsManager {
 
     @Override
     public List<Chest> getChests() {
-        return Collections.unmodifiableList(new ArrayList<>(chests.values()));
+        return chests.isEmpty() ? Collections.emptyList() : Collections.unmodifiableList(new LinkedList<>(chests.values()));
     }
 
     @Override
     public List<Chest> getChests(Chunk chunk) {
         Set<Chest> chunkChests = chestsByChunks.get(ChunkPosition.of(chunk));
-        return Collections.unmodifiableList(chunkChests == null ? new ArrayList<>() : new ArrayList<>(chunkChests));
+        return chunkChests == null || chunkChests.isEmpty() ? Collections.emptyList() :
+                Collections.unmodifiableList(new LinkedList<>(chunkChests));
     }
 
     @Override
@@ -168,9 +175,10 @@ public final class ChestsHandler implements ChestsManager {
 
     @Override
     public List<ChestData> getAllChestData() {
-        return new ArrayList<>(chestsData.values());
+        return Collections.unmodifiableList(new LinkedList<>(chestsData.values()));
     }
 
+    @Nullable
     private <T extends Chest> T getChest(Location location, Class<T> chestClass) {
         Chest chest = chests.get(location);
 

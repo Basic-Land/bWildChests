@@ -8,6 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public interface ChestsManager {
      * @param location The location to check.
      * @return The chest object. If no chests were found, or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     Chest getChest(Location location);
 
     /**
@@ -31,6 +33,7 @@ public interface ChestsManager {
      * @return The chest object. If no chests were found, the chest is not a linked chest,
      * or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     LinkedChest getLinkedChest(Location location);
 
     /**
@@ -40,6 +43,7 @@ public interface ChestsManager {
      * @return The chest object. If no chests were found, the chest is not a storage chest,
      * or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     StorageChest getStorageChest(Location location);
 
     /**
@@ -74,6 +78,7 @@ public interface ChestsManager {
      *
      * @param name The name of the chest (similar to config names)
      */
+    @Nullable
     ChestData getChestData(String name);
 
     /**
@@ -81,6 +86,7 @@ public interface ChestsManager {
      *
      * @param itemStack The item to check (similar to configured item in config)
      */
+    @Nullable
     ChestData getChestData(ItemStack itemStack);
 
     /**

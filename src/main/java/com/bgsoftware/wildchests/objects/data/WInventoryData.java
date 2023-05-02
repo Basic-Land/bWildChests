@@ -5,8 +5,8 @@ import org.bukkit.ChatColor;
 
 public class WInventoryData implements InventoryData {
 
-    private final String title;
-    private final double price;
+    private String title;
+    private double price;
 
     public WInventoryData(String title, double price) {
         this.title = ChatColor.translateAlternateColorCodes('&', title);

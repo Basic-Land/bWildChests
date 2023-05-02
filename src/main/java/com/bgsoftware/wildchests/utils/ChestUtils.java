@@ -31,6 +31,33 @@ public final class ChestUtils {
                 !chestData.getBlacklisted().contains(itemKey);
     };
 
+    public static ItemStack[] fixItemStackAmount(ItemStack itemStack, int amount) {
+        if (amount <= itemStack.getMaxStackSize())
+            return new ItemStack[]{itemStack};
+
+        int amountOfFullStacks = amount / itemStack.getMaxStackSize();
+        int amountOfLeftOvers = amount % itemStack.getMaxStackSize();
+
+        ItemStack[] totalItems = new ItemStack[amountOfLeftOvers == 0 ? amountOfFullStacks : amountOfFullStacks + 1];
+        int currentCursor = 0;
+
+        if (amountOfFullStacks > 0) {
+            ItemStack fullStackItem = itemStack.clone();
+            fullStackItem.setAmount(itemStack.getMaxStackSize());
+            for (int i = 0; i < amountOfFullStacks; ++i) {
+                totalItems[currentCursor++] = fullStackItem.clone();
+            }
+        }
+
+        if (amountOfLeftOvers > 0) {
+            ItemStack leftOverItem = itemStack.clone();
+            leftOverItem.setAmount(amountOfLeftOvers);
+            totalItems[currentCursor] = leftOverItem;
+        }
+
+        return totalItems;
+    }
+
     public static void tryCraftChest(Chest chest) {
         Inventory[] pages = chest.getPages();
 
@@ -143,10 +170,6 @@ public final class ChestUtils {
             NotifierTask.addTransaction(player.getUniqueId(), toSell, toSell.getAmount(), finalPrice);
 
         return successDeposit;
-    }
-
-    public static ItemStack getRemainingItem(Map<Integer, ItemStack> additionalItems) {
-        return additionalItems.isEmpty() ? null : new ArrayList<>(additionalItems.values()).get(0);
     }
 
 }

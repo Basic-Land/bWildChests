@@ -12,9 +12,9 @@ import java.util.List;
 
 public final class CommandsHandler implements CommandExecutor, TabCompleter {
 
-    private final WildChestsPlugin plugin;
+    private WildChestsPlugin plugin;
 
-    private final List<ICommand> subCommands = new ArrayList<>();
+    private List<ICommand> subCommands = new ArrayList<>();
 
     public CommandsHandler(WildChestsPlugin plugin) {
         this.plugin = plugin;

@@ -7,6 +7,8 @@ import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
+
 public final class WildChestsAPI {
 
     private static WildChests instance;
@@ -17,6 +19,7 @@ public final class WildChestsAPI {
      * @param location The location to check.
      * @return The chest object. If no chests were found, or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     public static Chest getChest(Location location) {
         return instance.getChestsManager().getChest(location);
     }
@@ -28,6 +31,7 @@ public final class WildChestsAPI {
      * @return The chest object. If no chests were found, the chest is not a linked chest,
      * or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     public static LinkedChest getLinkedChest(Location location) {
         return instance.getChestsManager().getLinkedChest(location);
     }
@@ -39,6 +43,7 @@ public final class WildChestsAPI {
      * @return The chest object. If no chests were found, the chest is not a storage chest,
      * or the chest is in an unloaded chunk, null will be returned.
      */
+    @Nullable
     public static StorageChest getStorageChest(Location location) {
         return instance.getChestsManager().getStorageChest(location);
     }
@@ -48,6 +53,7 @@ public final class WildChestsAPI {
      *
      * @param name The name of the chest (similar to config names)
      */
+    @Nullable
     public static ChestData getChestData(String name) {
         return instance.getChestsManager().getChestData(name);
     }
@@ -57,6 +63,7 @@ public final class WildChestsAPI {
      *
      * @param itemStack The item to check (similar to configured item in config)
      */
+    @Nullable
     public static ChestData getChestData(ItemStack itemStack) {
         return instance.getChestsManager().getChestData(itemStack);
     }
