@@ -1,10 +1,17 @@
 group 'Hooks:CoreProtect'
 
 dependencies {
-    compileOnly 'net.coreprotect:CoreProtect:19.0'
+    compileOnly 'net:coreprotect:21.3'
     compileOnly "org.spigotmc:v1_16_R3:latest"
     compileOnly project(":API")
     compileOnly rootProject
+}
+
+repositories {
+    maven {
+        url 'http://nexus.basicland.cz:8081/repository/dev-public/'
+        allowInsecureProtocol = true
+    }
 }
 
 if (project.hasProperty('hook.compile_coreprotect') &&
