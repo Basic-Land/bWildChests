@@ -179,7 +179,8 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
                     new Pair<>(3117, "v1191"),
                     new Pair<>(3120, "v1192"),
                     new Pair<>(3218, "v1193"),
-                    new Pair<>(3337, "v1194")
+                    new Pair<>(3337, "v1194"),
+                    new Pair<>(3463 ,"v120")
             );
 
             for (Pair<Integer, String> versionData : versions) {
