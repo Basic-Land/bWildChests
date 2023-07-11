@@ -1,6 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_16_R3.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
+import com.bgsoftware.wildchests.nms.v1_16_R3.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.server.v1_16_R3.EntityHuman;
@@ -121,10 +122,7 @@ public class WildInventory implements IInventory {
     }
 
     public NonNullList<ItemStack> getContents() {
-        NonNullList<ItemStack> contents = NonNullList.a(this.items.size(), ItemStack.b);
-        for (int i = 0; i < contents.size(); i++)
-            contents.set(i, getItem(i));
-        return contents;
+        return TransformingNonNullList.transform(this.items, ItemStack.b, WildContainerItemImpl::transform);
     }
 
     public void onOpen(CraftHumanEntity who) {
