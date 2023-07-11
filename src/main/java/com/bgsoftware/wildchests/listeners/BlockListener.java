@@ -5,7 +5,7 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.utils.ItemUtils;
-import cz.devfire.bcore.Spigot.Hooks.Check;
+import cz.basicland.blibs.spigot.hooks.Check;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
