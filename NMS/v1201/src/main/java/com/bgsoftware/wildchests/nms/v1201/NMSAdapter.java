@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v120;
+package com.bgsoftware.wildchests.nms.v1201;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;

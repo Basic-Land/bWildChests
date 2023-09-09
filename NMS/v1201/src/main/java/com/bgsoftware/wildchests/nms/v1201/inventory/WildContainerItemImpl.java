@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v120.inventory;
+package com.bgsoftware.wildchests.nms.v1201.inventory;
 
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.world.item.ItemStack;

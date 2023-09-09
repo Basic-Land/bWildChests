@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v120.utils;
+package com.bgsoftware.wildchests.nms.v1201.utils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;

@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v120.inventory;
+package com.bgsoftware.wildchests.nms.v1201.inventory;
 
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.world.entity.player.Inventory;

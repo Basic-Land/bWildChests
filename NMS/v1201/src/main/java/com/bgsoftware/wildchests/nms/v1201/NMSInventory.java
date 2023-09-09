@@ -1,9 +1,9 @@
-package com.bgsoftware.wildchests.nms.v120;
+package com.bgsoftware.wildchests.nms.v1201;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
-import com.bgsoftware.wildchests.nms.v120.inventory.*;
+import com.bgsoftware.wildchests.nms.v1201.inventory.*;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import net.minecraft.core.BlockPos;

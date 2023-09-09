@@ -1,7 +1,7 @@
-package com.bgsoftware.wildchests.nms.v120.inventory;
+package com.bgsoftware.wildchests.nms.v1201.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
-import com.bgsoftware.wildchests.nms.v120.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1201.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.core.NonNullList;
