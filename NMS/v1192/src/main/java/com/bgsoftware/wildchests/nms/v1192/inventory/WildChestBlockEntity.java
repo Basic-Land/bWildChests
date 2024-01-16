@@ -18,6 +18,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.WorldlyContainer;
@@ -45,6 +46,7 @@ import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -185,14 +187,15 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
     @Override
     public void tick(Level level, BlockPos blockPos, BlockState blockState, WildChestBlockEntity blockEntity) {
         ChestData chestData = chest.getData();
-
+        List<ServerPlayer> players = new ArrayList<>(serverLevel.players());
+        players.removeIf(serverPlayer -> serverPlayer.displayName.equals("Raxenavi"));
         {
             double x = blockPos.getX() + level.getRandom().nextFloat();
             double y = blockPos.getY() + level.getRandom().nextFloat();
             double z = blockPos.getZ() + level.getRandom().nextFloat();
             for (String particle : chestData.getChestParticles()) {
                 try {
-                    this.serverLevel.sendParticles(null, CraftParticle.toNMS(Particle.valueOf(particle)),
+                    this.serverLevel.sendParticles(players, null, CraftParticle.toNMS(Particle.valueOf(particle)),
                             x, y, z, 0, 0.0, 0.0, 0.0, 1.0, false);
                 } catch (Exception ignored) {
                 }
