@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'WildChests'
-version = "2023.2"
+version = "2023.3"
 
 project.ext {
     archiveFolder = file("archive/")
@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.bgsoftware.common.config:CommentedConfiguration:1.0.3'
     implementation 'com.bgsoftware.common.updater:Updater:latest'
     implementation 'com.bgsoftware.common.shopsbridge:ShopsBridge:b6:all@jar'
+    implementation 'com.bgsoftware.common.dependencies:DependenciesManager:b2'
 
     // Spigot jars
     compileOnly "org.spigotmc:v1_8_R1:latest"
@@ -102,6 +103,10 @@ task copyAPI(type: Copy) {
     from rootProject.archiveFolder.getAbsolutePath() + '/API.jar'
     into rootProject.targetFolder.getAbsolutePath()
     rename('API.jar', rootProject.name + 'API.jar')
+}
+
+clean {
+    delete rootProject.archiveFolder
 }
 
 build {

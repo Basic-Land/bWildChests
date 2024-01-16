@@ -179,7 +179,7 @@ public class WRegularChest extends WChest implements RegularChest {
 
     private void updateTitles() {
         for (int i = 0; i < inventories.length(); i++) {
-            inventories.get(i).setTitle(getData().getTitle(i + 1).replace("{0}", getPagesAmount() + ""));
+            inventories.get(i).setTitle(getData().getTitle(i + 1).replace("{0}", String.valueOf(getPagesAmount())));
         }
     }
 

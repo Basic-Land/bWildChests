@@ -21,7 +21,7 @@ public final class StackerProvider_WildStacker implements StackerProvider {
 
     @Override
     public boolean dropItem(Location location, ItemStack itemStack, int amount) {
-        StackedItem item =  WildStackerAPI.getWildStacker().getSystemManager().spawnItemWithAmount(location, itemStack, 1);
+        StackedItem item = WildStackerAPI.getWildStacker().getSystemManager().spawnItemWithAmount(location, itemStack, 1);
         item.getItem().setPickupDelay(20);
         item.setStackAmount(amount, true);
         item.updateName();

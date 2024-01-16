@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url "https://repo.papermc.io/repository/maven-public/" }
+    }
+}
+
 rootProject.name = 'WildChests'
 
 include 'API'
@@ -10,8 +17,14 @@ include 'Hooks:SuperiorSkyblock'
 include 'Hooks:Vault'
 include 'Hooks:WildStacker'
 include 'NMS'
+include 'Hooks:SuperiorSkyblock'
+include 'Hooks:Vault'
+include 'Hooks:WildStacker'
+include 'NMS'
 include 'NMS:v1_16_R3'
-include 'NMS:v1192'
-include 'NMS:v1194'
-include 'NMS:v1201'
+include 'NMS:v1_19_2'
+include 'NMS:v1_19_4'
+include 'NMS:v1_20_1'
+include 'NMS:v1_20_2'
+include 'NMS:v1_20_3'
 

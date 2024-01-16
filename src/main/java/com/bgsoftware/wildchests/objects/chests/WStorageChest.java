@@ -37,7 +37,7 @@ public final class WStorageChest extends WChest implements StorageChest {
         super(placer, location, chestData);
         maxAmount = chestData.getStorageUnitMaxAmount();
         inventory = plugin.getNMSInventory().createInventory(this, INVENTORY_SIZE,
-                chestData.getTitle(1).replace("{0}", amount + ""), 0);
+                chestData.getTitle(1).replace("{0}", String.valueOf(amount)), 0);
 
         for (int i = 0; i < INVENTORY_SIZE; ++i)
             contents.add(WildContainerItem.AIR);
@@ -109,7 +109,7 @@ public final class WStorageChest extends WChest implements StorageChest {
             storageItem.setAmount(Math.min(maxStackSize, amount.intValue()));
         }
 
-        inventory.setTitle(getData().getTitle(1).replace("{0}", amount + ""));
+        inventory.setTitle(getData().getTitle(1).replace("{0}", String.valueOf(amount)));
     }
 
     @Override

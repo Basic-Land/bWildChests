@@ -111,7 +111,7 @@ public final class StatementHolder {
                         for (Map<Integer, Object> values : batches) {
                             for (Map.Entry<Integer, Object> entry : values.entrySet()) {
                                 preparedStatement.setObject(entry.getKey(), entry.getValue());
-                                errorQuery.value = errorQuery.value.replaceFirst("\\?", entry.getValue() + "");
+                                errorQuery.value = errorQuery.value.replaceFirst("\\?", String.valueOf(entry.getValue()));
                             }
                             preparedStatement.addBatch();
                         }
@@ -126,7 +126,7 @@ public final class StatementHolder {
                     } else {
                         for (Map.Entry<Integer, Object> entry : values.entrySet()) {
                             preparedStatement.setObject(entry.getKey(), entry.getValue());
-                            errorQuery.value = errorQuery.value.replaceFirst("\\?", entry.getValue() + "");
+                            errorQuery.value = errorQuery.value.replaceFirst("\\?", String.valueOf(entry.getValue()));
                         }
                         preparedStatement.executeUpdate();
                     }

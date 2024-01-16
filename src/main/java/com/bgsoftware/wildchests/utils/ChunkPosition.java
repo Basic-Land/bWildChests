@@ -24,6 +24,10 @@ public final class ChunkPosition {
         return new ChunkPosition(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
+    public static ChunkPosition of(BlockPosition blockPosition) {
+        return new ChunkPosition(blockPosition.getWorldName(), blockPosition.getX() >> 4, blockPosition.getZ() >> 4);
+    }
+
     public int getX() {
         return x;
     }
@@ -46,5 +50,4 @@ public final class ChunkPosition {
     public int hashCode() {
         return Objects.hash(world, x, z);
     }
-
 }

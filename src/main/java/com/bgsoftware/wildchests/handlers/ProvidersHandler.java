@@ -27,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -39,8 +40,10 @@ public final class ProvidersHandler implements ProvidersManager {
     private final Map<UUID, PendingTransaction> pendingTransactions = new HashMap<>();
     private final List<IChestPlaceListener> chestPlaceListeners = new ArrayList<>();
     private final List<IChestBreakListener> chestBreakListeners = new ArrayList<>();
+    private final boolean isShopsBridge = false;
     private PricesProvider pricesProvider = new PricesProvider_Default();
     private StackerProvider stackerProvider = new StackerProvider_Default();
+    private long lastBulkTransactionStart = -1;
 
     public ProvidersHandler(WildChestsPlugin plugin) {
         this.plugin = plugin;
@@ -116,8 +119,9 @@ public final class ProvidersHandler implements ProvidersManager {
     public void startSellingTask(OfflinePlayer offlinePlayer) {
         if (!pendingTransactions.containsKey(offlinePlayer.getUniqueId()))
             pendingTransactions.put(offlinePlayer.getUniqueId(), new PendingTransaction());
-        if (this.pricesProvider instanceof PricesProvider_ShopsBridgeWrapper) {
+        if (this.lastBulkTransactionStart == -1 && this.pricesProvider instanceof PricesProvider_ShopsBridgeWrapper) {
             ((PricesProvider_ShopsBridgeWrapper) this.pricesProvider).startBulkTransaction();
+            this.lastBulkTransactionStart = System.currentTimeMillis();
         }
     }
 
@@ -126,7 +130,11 @@ public final class ProvidersHandler implements ProvidersManager {
         if (pendingTransaction != null)
             pendingTransaction.forEach(((depositMethod, value) -> depositPlayer(offlinePlayer, depositMethod, value)));
         if (this.pricesProvider instanceof PricesProvider_ShopsBridgeWrapper) {
-            ((PricesProvider_ShopsBridgeWrapper) this.pricesProvider).stopBulkTransaction();
+            long currentTime = System.currentTimeMillis();
+            if (TimeUnit.MILLISECONDS.toSeconds(currentTime - this.lastBulkTransactionStart) > 10) {
+                ((PricesProvider_ShopsBridgeWrapper) this.pricesProvider).stopBulkTransaction();
+                this.lastBulkTransactionStart = -1;
+            }
         }
     }
 
@@ -181,7 +189,7 @@ public final class ProvidersHandler implements ProvidersManager {
                 .flatMap(shopsProvider -> shopsProvider.createInstance(plugin).map(shopsBridge ->
                         new PricesProvider_ShopsBridgeWrapper(shopsProvider, shopsBridge)));
 
-        if (!pricesProvider.isPresent()) {
+        if (pricesProvider.isEmpty()) {
             WildChestsPlugin.log("- Couldn't find any prices providers, using default one");
             return;
         }

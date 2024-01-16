@@ -1,5 +1,6 @@
 package com.bgsoftware.wildchests;
 
+import com.bgsoftware.common.dependencies.DependenciesManager;
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.common.updater.Updater;
 import com.bgsoftware.wildchests.api.WildChests;
@@ -67,6 +68,9 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
     @Override
     public void onLoad() {
         plugin = this;
+
+        DependenciesManager.inject(this);
+
         shouldEnable = loadNMSAdapter();
     }
 
@@ -171,16 +175,11 @@ public final class WildChestsPlugin extends JavaPlugin implements WildChests {
             int dataVersion = getDataVersion.invoke(Bukkit.getUnsafe());
 
             List<Pair<Integer, String>> versions = Arrays.asList(
-                    new Pair<>(2729, null),
-                    new Pair<>(2730, "v117"),
-                    new Pair<>(2865, "v1181"),
-                    new Pair<>(2975, "v1182"),
-                    new Pair<>(3105, "v119"),
-                    new Pair<>(3117, "v1191"),
-                    new Pair<>(3120, "v1192"),
-                    new Pair<>(3218, "v1193"),
-                    new Pair<>(3337, "v1194"),
-                    new Pair<>(3465 ,"v1201")
+                    new Pair<>(3120, "v1_19_2"),
+                    new Pair<>(3337, "v1_19_4"),
+                    new Pair<>(3465, "v1_20_1"),
+                    new Pair<>(3578, "v1_20_2"),
+                    new Pair<>(3700, "v1_20_3")
             );
 
             for (Pair<Integer, String> versionData : versions) {

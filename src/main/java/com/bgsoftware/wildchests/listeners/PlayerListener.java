@@ -30,7 +30,7 @@ public final class PlayerListener implements Listener {
 
         if (e.getPlayer().isOp() && plugin.getUpdater().isOutdated()) {
             Executor.sync(() ->
-                    e.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "WildChests" +
+                    e.getPlayer().sendMessage(ChatColor.DARK_PURPLE + String.valueOf(ChatColor.BOLD) + "WildChests" +
                             ChatColor.GRAY + " A new version is available (v" + plugin.getUpdater().getLatestVersion() + ")!"), 20L);
         }
     }

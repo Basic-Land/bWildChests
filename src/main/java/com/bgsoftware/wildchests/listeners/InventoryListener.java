@@ -45,6 +45,7 @@ public final class InventoryListener implements Listener {
 
     private final Map<UUID, ItemStack> latestClickedItem = new HashMap<>();
     private final String[] inventoryTitles = new String[]{"Expand Confirmation",};
+
     public InventoryListener(WildChestsPlugin plugin) {
         this.plugin = plugin;
         initGUIConfirm();
@@ -186,21 +187,21 @@ public final class InventoryListener implements Listener {
 
         ItemStack denyButton = Materials.RED_STAINED_GLASS_PANE.toBukkitItem();
         ItemMeta denyMeta = denyButton.getItemMeta();
-        denyMeta.setDisplayName("" + ChatColor.RED + ChatColor.BOLD + "DENY");
+        denyMeta.setDisplayName(String.valueOf(ChatColor.RED) + ChatColor.BOLD + "DENY");
         denyButton.setItemMeta(denyMeta);
 
         WChest.guiConfirm.setItem(0, denyButton);
 
         ItemStack confirmButton = Materials.GREEN_STAINED_GLASS_PANE.toBukkitItem();
         ItemMeta confirmMeta = confirmButton.getItemMeta();
-        confirmMeta.setDisplayName("" + ChatColor.GREEN + ChatColor.BOLD + "CONFIRM");
+        confirmMeta.setDisplayName(String.valueOf(ChatColor.GREEN) + ChatColor.BOLD + "CONFIRM");
         confirmButton.setItemMeta(confirmMeta);
 
         WChest.guiConfirm.setItem(4, confirmButton);
 
         ItemStack blankButton = Materials.BLACK_STAINED_GLASS_PANE.toBukkitItem();
         ItemMeta blankMeta = blankButton.getItemMeta();
-        blankMeta.setDisplayName("" + ChatColor.WHITE);
+        blankMeta.setDisplayName(String.valueOf(ChatColor.WHITE));
         blankButton.setItemMeta(blankMeta);
 
         WChest.guiConfirm.setItem(1, blankButton);
