@@ -189,7 +189,7 @@ public final class ProvidersHandler implements ProvidersManager {
                 .flatMap(shopsProvider -> shopsProvider.createInstance(plugin).map(shopsBridge ->
                         new PricesProvider_ShopsBridgeWrapper(shopsProvider, shopsBridge)));
 
-        if (pricesProvider.isEmpty()) {
+        if (!pricesProvider.isPresent()) {
             WildChestsPlugin.log("- Couldn't find any prices providers, using default one");
             return;
         }
