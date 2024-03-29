@@ -3,7 +3,11 @@ package com.bgsoftware.wildchests.database;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -13,14 +17,14 @@ public final class SQLHelper {
     private static final Object mutex = new Object();
     private static Connection connection = null;
 
-    private SQLHelper() {
+    private SQLHelper(){
 
     }
 
-    public static void waitForConnection() {
+    public static void waitForConnection(){
         try {
             ready.get();
-        } catch (Exception ex) {
+        }catch(Exception ex){
             ex.printStackTrace();
         }
     }
@@ -29,7 +33,7 @@ public final class SQLHelper {
         return mutex;
     }
 
-    public static boolean createConnection(WildChestsPlugin plugin) {
+    public static boolean createConnection(WildChestsPlugin plugin){
         try {
             WildChestsPlugin.log("Trying to connect to SQLite database...");
 
@@ -43,18 +47,17 @@ public final class SQLHelper {
             ready.complete(null);
 
             return true;
-        } catch (Exception ignored) {
-        }
+        }catch(Exception ignored){}
 
         return false;
     }
 
-    public static void executeUpdate(String statement) {
+    public static void executeUpdate(String statement){
         PreparedStatement preparedStatement = null;
-        try {
+        try{
             preparedStatement = connection.prepareStatement(statement);
             preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             System.out.println(statement);
             ex.printStackTrace();
         } finally {
@@ -62,16 +65,16 @@ public final class SQLHelper {
         }
     }
 
-    public static boolean doesConditionExist(String statement) {
+    public static boolean doesConditionExist(String statement){
         boolean ret = false;
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try {
+        try{
             preparedStatement = connection.prepareStatement(statement);
             resultSet = preparedStatement.executeQuery();
             ret = resultSet.next();
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             ex.printStackTrace();
         } finally {
             close(resultSet);
@@ -81,14 +84,14 @@ public final class SQLHelper {
         return ret;
     }
 
-    public static void executeQuery(String statement, QueryConsumer<ResultSet> callback) {
+    public static void executeQuery(String statement, QueryConsumer<ResultSet> callback){
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try {
+        try{
             preparedStatement = connection.prepareStatement(statement);
             resultSet = preparedStatement.executeQuery();
             callback.accept(resultSet);
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             ex.printStackTrace();
         } finally {
             close(resultSet);
@@ -96,39 +99,38 @@ public final class SQLHelper {
         }
     }
 
-    public static void close() {
+    public static void close(){
         try {
             connection.close();
-        } catch (Exception ex) {
+        }catch (Exception ex){
             ex.printStackTrace();
         }
     }
 
-    public static void buildStatement(String query, QueryConsumer<PreparedStatement> consumer, Consumer<SQLException> failure) {
+    public static void buildStatement(String query, QueryConsumer<PreparedStatement> consumer, Consumer<SQLException> failure){
         PreparedStatement preparedStatement = null;
-        try {
+        try{
             preparedStatement = connection.prepareStatement(query);
             consumer.accept(preparedStatement);
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             failure.accept(ex);
         } finally {
-            close(preparedStatement);
+          close(preparedStatement);
         }
     }
 
-    private static void close(AutoCloseable closeable) {
-        if (closeable != null) {
+    private static void close(AutoCloseable closeable){
+        if(closeable != null){
             try {
                 closeable.close();
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
     }
 
-    public static void setAutoCommit(boolean autoCommit) {
+    public static void setAutoCommit(boolean autoCommit){
         try {
             connection.setAutoCommit(autoCommit);
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             ex.printStackTrace();
         }
     }
@@ -137,7 +139,7 @@ public final class SQLHelper {
         connection.commit();
     }
 
-    public interface QueryConsumer<T> {
+    public interface QueryConsumer<T>{
 
         void accept(T value) throws SQLException;
 

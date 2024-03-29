@@ -28,7 +28,7 @@ sell-format: false
 # Set a chance of it to get dropped between 0 and 100.
 explode-drop-chance: 100
 
-# Choose which prices plugin to check for prices (Auto, CMI, EconomyShopGUI, Essentials, GUIShop, newtShop, QuantumShop, ShopGUIPlus, zShop).
+# Choose which prices plugin to check for prices (Auto, CMI, EconomyShopGUI, Essentials, ExcellentShop, GUIShop, newtShop, QuantumShop, ShopGUIPlus, zShop).
 prices-provider: 'WildChests'
 
 # What stacker provider should the plugin use? (WildStacker, RoseStacker, Auto)
@@ -37,8 +37,8 @@ stacker-provider: 'Auto'
 # Built-in prices list.
 # Use the "ID:PRICE" or "ID:DATA:PRICE" formats.
 prices-list:
-  - 'STONE:5' #Each stone will cost $5
-  - 'LOG:0:5' #Only oak logs will cost $5
+- 'STONE:5' #Each stone will cost $5
+- 'LOG:0:5' #Only oak logs will cost $5
 
 # All settings related to database.
 database:
