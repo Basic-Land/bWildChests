@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v1192.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_4.inventory;
 
 import com.bgsoftware.wildchests.listeners.InventoryListener;
 import com.bgsoftware.wildchests.objects.chests.WChest;
@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftInventoryView;
 
 public class WildChestMenu extends ChestMenu {
 

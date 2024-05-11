@@ -1,12 +1,12 @@
-package com.bgsoftware.wildchests.nms.v1_18.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_2.inventory;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
-import com.bgsoftware.wildchests.nms.v1_18.NMSInventoryImpl;
-import com.bgsoftware.wildchests.nms.v1_18.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_19_2.NMSInventoryImpl;
+import com.bgsoftware.wildchests.nms.v1_19_2.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.chests.WStorageChest;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
@@ -35,12 +35,12 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_18_R2.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_18_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_19_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 

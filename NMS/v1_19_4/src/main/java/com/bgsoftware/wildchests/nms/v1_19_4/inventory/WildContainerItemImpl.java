@@ -1,15 +1,15 @@
-package com.bgsoftware.wildchests.nms.v1192.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_4.inventory;
 
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 
 public class WildContainerItemImpl implements WildContainerItem {
 
     private final ItemStack handle;
     private final CraftItemStack craftItemStack;
 
-    public WildContainerItemImpl(net.minecraft.world.item.ItemStack nmsItemStack) {
+    public WildContainerItemImpl(ItemStack nmsItemStack) {
         this(nmsItemStack, CraftItemStack.asCraftMirror(nmsItemStack));
     }
 

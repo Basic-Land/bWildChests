@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v1_19;
+package com.bgsoftware.wildchests.nms.v1_19_4;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.nms.NMSAdapter;

@@ -5,6 +5,7 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.ItemUtils;
+import cz.basicland.blibs.spigot.hooks.Check;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

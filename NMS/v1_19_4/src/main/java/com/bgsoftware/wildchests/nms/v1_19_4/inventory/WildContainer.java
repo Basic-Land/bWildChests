@@ -1,7 +1,7 @@
-package com.bgsoftware.wildchests.nms.v1_19.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_4.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
-import com.bgsoftware.wildchests.nms.v1_19.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_19_4.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.core.NonNullList;
@@ -14,7 +14,6 @@ import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;

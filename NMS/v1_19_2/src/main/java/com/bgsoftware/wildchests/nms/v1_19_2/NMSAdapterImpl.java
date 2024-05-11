@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v1192;
+package com.bgsoftware.wildchests.nms.v1_19_2;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.nms.NMSAdapter;
@@ -27,36 +27,6 @@ import java.math.BigInteger;
 import java.util.Base64;
 
 public final class NMSAdapterImpl implements NMSAdapter {
-
-    private static void serialize(Inventory inventory, CompoundTag compoundTag) {
-        ListTag itemsList = new ListTag();
-        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
-
-        for (int i = 0; i < items.length; ++i) {
-            if (items[i] != null) {
-                ItemStack itemStack = CraftItemStack.asNMSCopy(items[i]);
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                itemStack.save(itemTag);
-                itemsList.add(itemTag);
-            }
-        }
-
-        compoundTag.putInt("Size", inventory.getSize());
-        compoundTag.put("Items", itemsList);
-    }
-
-    private static InventoryHolder deserialize(CompoundTag compoundTag) {
-        InventoryHolder inventory = new InventoryHolder(compoundTag.getInt("Size"), "Chest");
-        ListTag itemsList = compoundTag.getList("Items", 10);
-
-        for (int i = 0; i < itemsList.size(); i++) {
-            CompoundTag itemTag = itemsList.getCompound(i);
-            inventory.setItem(itemTag.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.of(itemTag)));
-        }
-
-        return inventory;
-    }
 
     @Override
     public String serialize(org.bukkit.inventory.ItemStack bukkitItem) {
@@ -169,7 +139,7 @@ public final class NMSAdapterImpl implements NMSAdapter {
             return;
 
         ServerLevel serverLevel = ((CraftWorld) bukkitWorld).getHandle();
-        BlockPos blockPos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        BlockPos blockPos = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         BlockEntity blockEntity = serverLevel.getBlockEntity(blockPos);
         if (blockEntity instanceof ChestBlockEntity)
             serverLevel.blockEvent(blockPos, blockEntity.getBlockState().getBlock(), 1, open ? 1 : 0);
@@ -205,6 +175,36 @@ public final class NMSAdapterImpl implements NMSAdapter {
         CompoundTag compoundTag = itemStack.getOrCreateTag();
         compoundTag.putString(key, value);
         return CraftItemStack.asCraftMirror(itemStack);
+    }
+
+    private static void serialize(Inventory inventory, CompoundTag compoundTag) {
+        ListTag itemsList = new ListTag();
+        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
+
+        for (int i = 0; i < items.length; ++i) {
+            if (items[i] != null) {
+                ItemStack itemStack = CraftItemStack.asNMSCopy(items[i]);
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putByte("Slot", (byte) i);
+                itemStack.save(itemTag);
+                itemsList.add(itemTag);
+            }
+        }
+
+        compoundTag.putInt("Size", inventory.getSize());
+        compoundTag.put("Items", itemsList);
+    }
+
+    private static InventoryHolder deserialize(CompoundTag compoundTag) {
+        InventoryHolder inventory = new InventoryHolder(compoundTag.getInt("Size"), "Chest");
+        ListTag itemsList = compoundTag.getList("Items", 10);
+
+        for (int i = 0; i < itemsList.size(); i++) {
+            CompoundTag itemTag = itemsList.getCompound(i);
+            inventory.setItem(itemTag.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.of(itemTag)));
+        }
+
+        return inventory;
     }
 
 }

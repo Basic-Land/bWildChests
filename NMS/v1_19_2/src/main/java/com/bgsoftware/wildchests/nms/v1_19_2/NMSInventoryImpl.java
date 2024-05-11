@@ -1,19 +1,10 @@
-package com.bgsoftware.wildchests.nms.v1192;
+package com.bgsoftware.wildchests.nms.v1_19_2;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
-<<<<<<<< HEAD:NMS/v1_19_2/src/main/java/com/bgsoftware/wildchests/nms/v1192/NMSInventory.java
-import com.bgsoftware.wildchests.nms.v1192.inventory.*;
-========
 import com.bgsoftware.wildchests.nms.NMSInventory;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.CraftWildInventoryImpl;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.WildChestBlockEntity;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.WildChestMenu;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.WildContainer;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.WildContainerItemImpl;
-import com.bgsoftware.wildchests.nms.v1_17.inventory.WildHopperMenu;
->>>>>>>> refs/remotes/upstream/dev:NMS/v1_17/src/main/java/com/bgsoftware/wildchests/nms/v1_17/NMSInventoryImpl.java
+import com.bgsoftware.wildchests.nms.v1_19_2.inventory.*;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import net.minecraft.core.BlockPos;
@@ -41,13 +32,6 @@ public final class NMSInventoryImpl implements NMSInventory {
 
     private static final ReflectMethod<TickingBlockEntity> CREATE_TICKING_BLOCK = new ReflectMethod<>(
             LevelChunk.class, "a", BlockEntity.class, BlockEntityTicker.class);
-
-    public static AbstractContainerMenu createMenu(int id, Inventory playerInventory,
-                                                   CraftWildInventory craftWildInventory) {
-        WildContainer container = ((CraftWildInventoryImpl) craftWildInventory).getInventory();
-        return container.getContainerSize() == 5 ? WildHopperMenu.of(id, playerInventory, container) :
-                WildChestMenu.of(id, playerInventory, container);
-    }
 
     @Override
     public void updateTileEntity(Chest chest) {
@@ -137,6 +121,13 @@ public final class NMSInventoryImpl implements NMSInventory {
         container.setItem(1, designItem, false);
         container.setItem(3, designItem, false);
         container.setItem(4, designItem, false);
+    }
+
+    public static AbstractContainerMenu createMenu(int id, Inventory playerInventory,
+                                                   CraftWildInventory craftWildInventory) {
+        WildContainer container = ((CraftWildInventoryImpl) craftWildInventory).getInventory();
+        return container.getContainerSize() == 5 ? WildHopperMenu.of(id, playerInventory, container) :
+                WildChestMenu.of(id, playerInventory, container);
     }
 
 }

@@ -1,7 +1,7 @@
-package com.bgsoftware.wildchests.nms.v1192.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_2.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
-import com.bgsoftware.wildchests.nms.v1192.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_19_2.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.core.NonNullList;
@@ -14,7 +14,6 @@ import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -25,6 +24,7 @@ public class WildContainer implements Container {
     public final Chest chest;
     private final int index;
 
+    private NonNullList<ItemStack> itemsAsNMSItemsView;
     public BiConsumer<Integer, ItemStack> setItemFunction = null;
     private int maxStack = 64;
     private int nonEmptyItems = 0;
@@ -135,7 +135,9 @@ public class WildContainer implements Container {
 
     @Override
     public NonNullList<ItemStack> getContents() {
-        return TransformingNonNullList.transform(this.items, ItemStack.EMPTY, WildContainerItemImpl::transform);
+        if (this.itemsAsNMSItemsView == null)
+            this.itemsAsNMSItemsView = TransformingNonNullList.transform(this.items, ItemStack.EMPTY, WildContainerItemImpl::transform);
+        return itemsAsNMSItemsView;
     }
 
     @Override
@@ -189,12 +191,12 @@ public class WildContainer implements Container {
         return nonEmptyItems <= 0;
     }
 
-    String getTitle() {
-        return title;
-    }
-
     void setTitle(String title) {
         this.title = title;
+    }
+
+    String getTitle() {
+        return title;
     }
 
     @Override

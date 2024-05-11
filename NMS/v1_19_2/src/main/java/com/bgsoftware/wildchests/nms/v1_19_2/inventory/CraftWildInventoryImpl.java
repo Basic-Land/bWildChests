@@ -1,10 +1,10 @@
-package com.bgsoftware.wildchests.nms.v1_19.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_2.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.world.Container;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftInventory;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventory;
 
 import java.util.List;
 
@@ -40,13 +40,13 @@ public class CraftWildInventoryImpl extends CraftInventory implements CraftWildI
     }
 
     @Override
-    public String getTitle() {
-        return getInventory().getTitle();
+    public void setTitle(String title) {
+        getInventory().setTitle(title);
     }
 
     @Override
-    public void setTitle(String title) {
-        getInventory().setTitle(title);
+    public String getTitle() {
+        return getInventory().getTitle();
     }
 
     @Override

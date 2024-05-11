@@ -1,8 +1,8 @@
-package com.bgsoftware.wildchests.nms.v1_19.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_2.inventory;
 
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 
 public class WildContainerItemImpl implements WildContainerItem {
 
@@ -18,10 +18,6 @@ public class WildContainerItemImpl implements WildContainerItem {
         this.craftItemStack = craftItemStack;
     }
 
-    public static ItemStack transform(WildContainerItem input) {
-        return ((WildContainerItemImpl) input).getHandle();
-    }
-
     @Override
     public CraftItemStack getBukkitItem() {
         return craftItemStack;
@@ -34,6 +30,10 @@ public class WildContainerItemImpl implements WildContainerItem {
     @Override
     public WildContainerItem copy() {
         return new WildContainerItemImpl(handle.copy());
+    }
+
+    public static ItemStack transform(WildContainerItem input) {
+        return ((WildContainerItemImpl) input).getHandle();
     }
 
 }

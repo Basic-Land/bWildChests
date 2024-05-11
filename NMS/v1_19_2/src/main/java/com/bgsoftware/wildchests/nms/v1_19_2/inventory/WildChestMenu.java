@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v1_19.inventory;
+package com.bgsoftware.wildchests.nms.v1_19_2.inventory;
 
 import com.bgsoftware.wildchests.listeners.InventoryListener;
 import com.bgsoftware.wildchests.objects.chests.WChest;
@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventoryView;
 
 public class WildChestMenu extends ChestMenu {
 
@@ -18,6 +18,22 @@ public class WildChestMenu extends ChestMenu {
         super(menuType, id, playerInventory, inventory, rows);
         this.playerInventory = playerInventory;
         this.inventory = inventory;
+    }
+
+    @Override
+    public CraftInventoryView getBukkitView() {
+        if (bukkitEntity == null) {
+            CraftWildInventoryImpl inventory = new CraftWildInventoryImpl(this.inventory);
+            bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
+        }
+
+        return bukkitEntity;
+    }
+
+    @Override
+    public void removed(Player player) {
+        if (!InventoryListener.buyNewPage.containsKey(player.getUUID()))
+            ((WildChestBlockEntity) ((WChest) inventory.chest).getTileEntityContainer()).stopOpen(player);
     }
 
     public static WildChestMenu of(int id, Inventory playerInventory, WildContainer inventory) {
@@ -55,22 +71,6 @@ public class WildChestMenu extends ChestMenu {
         }
 
         return new WildChestMenu(menuType, id, playerInventory, inventory, rows);
-    }
-
-    @Override
-    public CraftInventoryView getBukkitView() {
-        if (bukkitEntity == null) {
-            CraftWildInventoryImpl inventory = new CraftWildInventoryImpl(this.inventory);
-            bukkitEntity = new CraftInventoryView(playerInventory.player.getBukkitEntity(), inventory, this);
-        }
-
-        return bukkitEntity;
-    }
-
-    @Override
-    public void removed(Player player) {
-        if (!InventoryListener.buyNewPage.containsKey(player.getUUID()))
-            ((WildChestBlockEntity) ((WChest) inventory.chest).getTileEntityContainer()).stopOpen(player);
     }
 
 }

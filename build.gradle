@@ -29,6 +29,14 @@ allprojects {
         maven { url 'https://repo.bg-software.com/repository/api/' }
         maven { url 'https://repo.bg-software.com/repository/common/' }
         maven { url 'https://repo.bg-software.com/repository/dependencies/' }
+        maven {
+            url 'http://nexus.basicland.cz:8081/repository/dev-private/'
+            allowInsecureProtocol = true
+            credentials {
+                username "dev"
+                password "rtVXgxFyWkiVfU3"
+            }
+        }
     }
 
     dependencies {
@@ -77,7 +85,7 @@ dependencies {
     // Spigot jars
     compileOnly "org.spigotmc:v1_8_R1:latest"
     compileOnly 'org.spigotmc:v1_16_R3-Tuinity:latest'
-    compileOnly fileTree(dir: 'lib', include: ['*.jar'])
+    compileOnly 'cz.basicland:bLibs:2.0.0-WIP-b22'
 }
 
 jar {
