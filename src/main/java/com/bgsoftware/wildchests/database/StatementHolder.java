@@ -6,7 +6,11 @@ import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public final class StatementHolder {
 
@@ -14,7 +18,7 @@ public final class StatementHolder {
 
     private static final EnumMap<Query, IncreasableInteger> queryCalls = new EnumMap<>(Query.class);
 
-    private final List<Map<Integer, Object>> batches = new ArrayList<>();
+    private final List<Map<Integer, Object>> batches = new LinkedList<>();
 
     private final String query;
     private final DatabaseObject databaseObject;
@@ -29,10 +33,6 @@ public final class StatementHolder {
         this.query = query.getStatement();
         this.databaseObject = databaseObject == null ? DatabaseObject.NULL_DATA : databaseObject;
         this.databaseObject.setModified(query);
-    }
-
-    public static EnumMap<Query, IncreasableInteger> getQueryCalls() {
-        return queryCalls;
     }
 
     public StatementHolder setString(String value) {
@@ -111,7 +111,7 @@ public final class StatementHolder {
                         for (Map<Integer, Object> values : batches) {
                             for (Map.Entry<Integer, Object> entry : values.entrySet()) {
                                 preparedStatement.setObject(entry.getKey(), entry.getValue());
-                                errorQuery.value = errorQuery.value.replaceFirst("\\?", String.valueOf(entry.getValue()));
+                                errorQuery.value = errorQuery.value.replaceFirst("\\?", entry.getValue() + "");
                             }
                             preparedStatement.addBatch();
                         }
@@ -126,7 +126,7 @@ public final class StatementHolder {
                     } else {
                         for (Map.Entry<Integer, Object> entry : values.entrySet()) {
                             preparedStatement.setObject(entry.getKey(), entry.getValue());
-                            errorQuery.value = errorQuery.value.replaceFirst("\\?", String.valueOf(entry.getValue()));
+                            errorQuery.value = errorQuery.value.replaceFirst("\\?", entry.getValue() + "");
                         }
                         preparedStatement.executeUpdate();
                     }
@@ -143,6 +143,10 @@ public final class StatementHolder {
             values.clear();
             databaseObject.setUpdated(queryEnum);
         }
+    }
+
+    public static EnumMap<Query, IncreasableInteger> getQueryCalls() {
+        return queryCalls;
     }
 
     private static class StringHolder {

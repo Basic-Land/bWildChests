@@ -1,24 +1,41 @@
 package com.bgsoftware.wildchests.utils;
 
-import org.bukkit.inventory.*;
+import com.bgsoftware.common.reflection.ReflectMethod;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class RecipeUtils {
 
+    private static final ReflectMethod<Map<Character, RecipeChoice>> SHAPRED_RECIPE_GET_CHOICE_MAP =
+            new ReflectMethod<>(ShapedRecipe.class, Map.class, "getChoiceMap");
+    private static final ReflectMethod<List<RecipeChoice>> SHAPELESS_RECIPE_GET_CHOICE_LIST =
+            new ReflectMethod<>(ShapelessRecipe.class, Map.class, "getChoiceList");
+
     public static List<RecipeIngredient> getIngredients(Recipe recipe) {
         return recipe instanceof ShapedRecipe ? getIngredients((ShapedRecipe) recipe) :
-                recipe instanceof ShapelessRecipe ? getIngredients((ShapelessRecipe) recipe) : new ArrayList<>();
+                recipe instanceof ShapelessRecipe ? getIngredients((ShapelessRecipe) recipe) : Collections.emptyList();
     }
 
     public static Pair<List<Integer>, Integer> countItems(RecipeIngredient recipeIngredient, Inventory inventory, int offsetSlot) {
-        List<Integer> slots = new ArrayList<>();
+        List<Integer> slots = new LinkedList<>();
         int amount = 0;
 
         for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack itemStack = inventory.getContents()[i];
+            ItemStack itemStack = inventory.getItem(i);
             if (itemStack != null && recipeIngredient.test(itemStack)) {
                 amount += itemStack.getAmount();
                 slots.add(offsetSlot + i);
@@ -31,33 +48,33 @@ public final class RecipeUtils {
     private static List<RecipeIngredient> getIngredients(ShapedRecipe shapedRecipe) {
         List<RecipeIngredient> recipeIngredients;
 
-        try {
-            //noinspection unchecked, JavaReflectionMemberAccess
-            recipeIngredients = ((Map<Character, RecipeChoice>) ShapedRecipe.class.getMethod("getChoiceMap").invoke(shapedRecipe)).values().stream().map(RecipeIngredient::of).collect(Collectors.toList());
-        } catch (Exception ignored) {
-            recipeIngredients = getIngredients(new ArrayList<>(shapedRecipe.getIngredientMap().values()));
+        if (SHAPRED_RECIPE_GET_CHOICE_MAP.isValid()) {
+            recipeIngredients = SHAPRED_RECIPE_GET_CHOICE_MAP.invoke(shapedRecipe)
+                    .values().stream().map(RecipeIngredient::of).collect(Collectors.toList());
+        } else {
+            recipeIngredients = getIngredients(new LinkedList<>(shapedRecipe.getIngredientMap().values()));
         }
 
-        return sortIngredients(recipeIngredients);
+        return mergeIngredients(recipeIngredients);
     }
 
     private static List<RecipeIngredient> getIngredients(ShapelessRecipe shapelessRecipe) {
         List<RecipeIngredient> recipeIngredients;
 
-        try {
-            //noinspection unchecked, JavaReflectionMemberAccess
-            recipeIngredients = ((List<RecipeChoice>) ShapelessRecipe.class.getMethod("getChoiceList").invoke(shapelessRecipe)).stream().map(RecipeIngredient::of).collect(Collectors.toList());
-        } catch (Exception ignored) {
+        if (SHAPELESS_RECIPE_GET_CHOICE_LIST.isValid()) {
+            recipeIngredients = SHAPELESS_RECIPE_GET_CHOICE_LIST.invoke(shapelessRecipe)
+                    .stream().map(RecipeIngredient::of).collect(Collectors.toList());
+        } else {
             recipeIngredients = getIngredients(shapelessRecipe.getIngredientList());
         }
 
-        return sortIngredients(recipeIngredients);
+        return mergeIngredients(recipeIngredients);
     }
 
     @SuppressWarnings("deprecation")
     private static List<RecipeIngredient> getIngredients(List<ItemStack> oldList) {
         Map<ItemStack, Integer> counts = new HashMap<>();
-        List<ItemStack> ingredients = new ArrayList<>();
+        List<ItemStack> ingredients = new LinkedList<>();
 
         for (ItemStack itemStack : oldList) {
             if (itemStack != null) {
@@ -75,9 +92,9 @@ public final class RecipeUtils {
         return ingredients.stream().map(RecipeIngredient::of).collect(Collectors.toList());
     }
 
-    private static List<RecipeIngredient> sortIngredients(List<RecipeIngredient> recipeIngredients) {
+    private static List<RecipeIngredient> mergeIngredients(List<RecipeIngredient> recipeIngredients) {
         List<RecipeIngredient> recipeIngredientsList = new ArrayList<>(recipeIngredients);
-        List<RecipeIngredient> toRemove = new ArrayList<>();
+        List<RecipeIngredient> toRemove = new LinkedList<>();
 
         for (int i = 0; i < recipeIngredients.size(); i++) {
             RecipeIngredient current = recipeIngredients.get(i);
@@ -97,27 +114,14 @@ public final class RecipeUtils {
 
     public static final class RecipeIngredient implements Predicate<ItemStack> {
 
+        private int amount;
         private final List<ItemStack> ingredients;
         private final Predicate<ItemStack> predicate;
-        private int amount;
 
         private RecipeIngredient(List<ItemStack> ingredients, Predicate<ItemStack> predicate) {
             this.ingredients = ingredients;
             this.amount = ingredients.get(0).getAmount();
             this.predicate = predicate;
-        }
-
-        public static RecipeIngredient of(ItemStack itemStack) {
-            return new RecipeIngredient(Collections.singletonList(itemStack), itemStack::isSimilar);
-        }
-
-        @SuppressWarnings("deprecation")
-        public static RecipeIngredient of(RecipeChoice recipeChoice) {
-            if (recipeChoice instanceof RecipeChoice.ExactChoice)
-                return new RecipeIngredient(((RecipeChoice.ExactChoice) recipeChoice).getChoices(), recipeChoice);
-            else
-                return new RecipeIngredient(((RecipeChoice.MaterialChoice) recipeChoice).getChoices().stream().map(ItemStack::new)
-                        .collect(Collectors.toList()), recipeChoice);
         }
 
         @Override
@@ -167,6 +171,19 @@ public final class RecipeUtils {
         @Override
         public int hashCode() {
             return Objects.hash(ingredients);
+        }
+
+        public static RecipeIngredient of(ItemStack itemStack) {
+            return new RecipeIngredient(Collections.singletonList(itemStack), itemStack::isSimilar);
+        }
+
+        @SuppressWarnings("deprecation")
+        public static RecipeIngredient of(RecipeChoice recipeChoice) {
+            if (recipeChoice instanceof RecipeChoice.ExactChoice)
+                return new RecipeIngredient(((RecipeChoice.ExactChoice) recipeChoice).getChoices(), recipeChoice);
+            else
+                return new RecipeIngredient(((RecipeChoice.MaterialChoice) recipeChoice).getChoices().stream().map(ItemStack::new)
+                        .collect(Collectors.toList()), recipeChoice);
         }
 
     }

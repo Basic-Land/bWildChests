@@ -12,7 +12,9 @@ import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
+import com.bgsoftware.wildchests.utils.BlockPosition;
 import com.bgsoftware.wildchests.utils.ItemUtils;
+import com.bgsoftware.wildchests.utils.WorldsRegistry;
 import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -40,7 +42,8 @@ public abstract class WChest extends DatabaseObject implements Chest {
     public static String guiConfirmTitle;
 
     protected final UUID placer;
-    protected final Location location;
+    protected final BlockPosition blockPosition;
+    protected final WorldsRegistry.SyncedWorld world;
     protected final ChestData chestData;
 
     protected TileEntityContainer tileEntityContainer;
@@ -48,7 +51,9 @@ public abstract class WChest extends DatabaseObject implements Chest {
 
     protected WChest(UUID placer, Location location, ChestData chestData) {
         this.placer = placer;
-        this.location = location.clone();
+        this.blockPosition = new BlockPosition(location.getWorld().getName(),
+                location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        this.world = WorldsRegistry.getWorld(location.getWorld().getName());
         this.chestData = chestData;
     }
 
@@ -61,7 +66,8 @@ public abstract class WChest extends DatabaseObject implements Chest {
 
     @Override
     public Location getLocation() {
-        return location.clone();
+        return new Location(this.world.getBukkitWorld(),
+                this.blockPosition.getX(), this.blockPosition.getY(), this.blockPosition.getZ());
     }
 
     @Override
@@ -392,12 +398,12 @@ public abstract class WChest extends DatabaseObject implements Chest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WChest wChest = (WChest) o;
-        return location.equals(wChest.location);
+        return this.blockPosition.equals(wChest.blockPosition);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(location);
+        return Objects.hash(this.blockPosition);
     }
 
     private int getViewersAmount(List<HumanEntity> viewersList) {

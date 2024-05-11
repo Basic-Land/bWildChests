@@ -4,7 +4,12 @@ import com.bgsoftware.wildchests.api.key.Key;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("all")
 public class KeySet extends AbstractSet<Key> implements Set<Key> {
@@ -12,7 +17,7 @@ public class KeySet extends AbstractSet<Key> implements Set<Key> {
     private Set<String> set;
 
     public KeySet() {
-        this(new ArrayList<>());
+        this(Collections.emptyList());
     }
 
     public KeySet(List<String> keys) {

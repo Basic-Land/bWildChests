@@ -9,8 +9,9 @@ import com.bgsoftware.wildchests.utils.ItemUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class CommandInfo implements ICommand {
@@ -75,10 +76,10 @@ public final class CommandInfo implements ICommand {
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
         if (!sender.hasPermission(getPermission()))
-            return new ArrayList<>();
+            return Collections.emptyList();
 
         if (args.length == 2) {
-            List<String> list = new ArrayList<>();
+            List<String> list = new LinkedList<>();
             for (ChestData chestData : plugin.getChestsManager().getAllChestData())
                 if (chestData.getName().startsWith(args[1]))
                     list.add(chestData.getName());
@@ -86,7 +87,7 @@ public final class CommandInfo implements ICommand {
         }
 
         if (args.length >= 2) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         return null;

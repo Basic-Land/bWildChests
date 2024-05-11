@@ -5,13 +5,13 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.ItemUtils;
-import cz.basicland.blibs.spigot.hooks.Check;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class CommandGive implements ICommand {
@@ -66,7 +66,7 @@ public final class CommandGive implements ICommand {
 
         if (args.length == 4) {
             try {
-                chestItem.setAmount(Integer.parseInt(args[3]));
+                chestItem.setAmount(Integer.valueOf(args[3]));
             } catch (IllegalArgumentException ex) {
                 Locale.INVALID_AMOUNT.send(sender);
                 return;
@@ -93,10 +93,10 @@ public final class CommandGive implements ICommand {
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
         if (!sender.hasPermission(getPermission()))
-            return new ArrayList<>();
+            return Collections.emptyList();
 
         if (args.length == 3) {
-            List<String> list = new ArrayList<>();
+            List<String> list = new LinkedList<>();
             for (ChestData chestData : plugin.getChestsManager().getAllChestData())
                 if (chestData.getName().startsWith(args[2]))
                     list.add(chestData.getName());
@@ -104,7 +104,7 @@ public final class CommandGive implements ICommand {
         }
 
         if (args.length >= 4) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         return null;

@@ -2,6 +2,7 @@ package com.bgsoftware.wildchests.listeners;
 
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.objects.chests.WChest;
+import com.bgsoftware.wildchests.utils.WorldsRegistry;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,13 +11,35 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 public final class ChunksListener implements Listener {
 
     private final WildChestsPlugin plugin;
 
-    public ChunksListener(WildChestsPlugin plugin) {
+    public ChunksListener(WildChestsPlugin plugin){
         this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onChunkLoad(ChunkLoadEvent e) {
+        handleChunkLoad(plugin, e.getChunk());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onChunkUnload(ChunkUnloadEvent e) {
+        plugin.getDataHandler().saveDatabase(e.getChunk(), true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWorldLoad(WorldLoadEvent e) {
+        WorldsRegistry.onWorldLoad(e.getWorld());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWorldUnload(WorldUnloadEvent e) {
+        WorldsRegistry.onWorldUnload(e.getWorld());
     }
 
     public static void handleChunkLoad(WildChestsPlugin plugin, Chunk chunk) {
@@ -34,16 +57,6 @@ public final class ChunksListener implements Listener {
                 ((WChest) chest).onChunkLoad();
             }
         });
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onChunkLoad(ChunkLoadEvent e) {
-        handleChunkLoad(plugin, e.getChunk());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onChunkUnload(ChunkUnloadEvent e) {
-        plugin.getDataHandler().saveDatabase(e.getChunk(), true);
     }
 
 }

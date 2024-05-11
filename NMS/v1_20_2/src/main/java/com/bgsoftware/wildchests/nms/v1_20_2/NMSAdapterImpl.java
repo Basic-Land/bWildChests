@@ -1,4 +1,4 @@
-package com.bgsoftware.wildchests.nms.v1192;
+package com.bgsoftware.wildchests.nms.v1_20_2;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.nms.NMSAdapter;
@@ -6,7 +6,6 @@ import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -16,9 +15,9 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
@@ -119,7 +118,7 @@ public final class NMSAdapterImpl implements NMSAdapter {
         InventoryHolder[] inventories = new InventoryHolder[0];
 
         try {
-            CompoundTag compoundTag = NbtIo.read(new DataInputStream(inputStream), NbtAccounter.UNLIMITED);
+            CompoundTag compoundTag = NbtIo.read(new DataInputStream(inputStream));
             int length = compoundTag.getInt("Length");
             inventories = new InventoryHolder[length];
 
@@ -153,7 +152,7 @@ public final class NMSAdapterImpl implements NMSAdapter {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(buff);
 
         try {
-            CompoundTag compoundTag = NbtIo.read(new DataInputStream(inputStream), NbtAccounter.UNLIMITED);
+            CompoundTag compoundTag = NbtIo.read(new DataInputStream(inputStream));
             ItemStack itemStack = ItemStack.of(compoundTag);
             return CraftItemStack.asBukkitCopy(itemStack);
         } catch (Exception ex) {
@@ -169,7 +168,7 @@ public final class NMSAdapterImpl implements NMSAdapter {
             return;
 
         ServerLevel serverLevel = ((CraftWorld) bukkitWorld).getHandle();
-        BlockPos blockPos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        BlockPos blockPos = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         BlockEntity blockEntity = serverLevel.getBlockEntity(blockPos);
         if (blockEntity instanceof ChestBlockEntity)
             serverLevel.blockEvent(blockPos, blockEntity.getBlockState().getBlock(), 1, open ? 1 : 0);

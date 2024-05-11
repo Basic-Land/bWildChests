@@ -1,19 +1,26 @@
-package com.bgsoftware.wildchests.nms.v1_19;
+package com.bgsoftware.wildchests.nms.v1_20_4;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
-import com.bgsoftware.wildchests.nms.v1_19.inventory.*;
+import com.bgsoftware.wildchests.nms.NMSInventory;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.CraftWildInventoryImpl;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.WildChestBlockEntity;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.WildChestMenu;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.WildContainer;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.WildContainerItemImpl;
+import com.bgsoftware.wildchests.nms.v1_20_4.inventory.WildHopperMenu;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.CraftWildInventory;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ByteTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
@@ -21,23 +28,16 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R3.util.CraftChatMessage;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
-public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInventory {
+public final class NMSInventoryImpl implements NMSInventory {
 
     private static final ReflectMethod<TickingBlockEntity> CREATE_TICKING_BLOCK = new ReflectMethod<>(
             LevelChunk.class, "a", BlockEntity.class, BlockEntityTicker.class);
-
-    public static AbstractContainerMenu createMenu(int id, Inventory playerInventory,
-                                                   CraftWildInventory craftWildInventory) {
-        WildContainer container = ((CraftWildInventoryImpl) craftWildInventory).getInventory();
-        return container.getContainerSize() == 5 ? WildHopperMenu.of(id, playerInventory, container) :
-                WildChestMenu.of(id, playerInventory, container);
-    }
 
     @Override
     public void updateTileEntity(Chest chest) {
@@ -120,13 +120,23 @@ public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInve
                 new org.bukkit.inventory.ItemStack(Material.BLACK_STAINED_GLASS_PANE) : itemStack.clone());
 
         designItem.setCount(1);
-        designItem.addTagElement("DesignItem", ByteTag.valueOf(true));
+
+        CustomData customData = designItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        customData = customData.update(compoundTag -> compoundTag.putBoolean("DesignItem", true));
+        designItem.set(DataComponents.CUSTOM_DATA, customData);
 
         WildContainer container = ((CraftWildInventoryImpl) craftWildInventory).getInventory();
         container.setItem(0, designItem, false);
         container.setItem(1, designItem, false);
         container.setItem(3, designItem, false);
         container.setItem(4, designItem, false);
+    }
+
+    public static AbstractContainerMenu createMenu(int id, Inventory playerInventory,
+                                                   CraftWildInventory craftWildInventory) {
+        WildContainer container = ((CraftWildInventoryImpl) craftWildInventory).getInventory();
+        return container.getContainerSize() == 5 ? WildHopperMenu.of(id, playerInventory, container) :
+                WildChestMenu.of(id, playerInventory, container);
     }
 
 }

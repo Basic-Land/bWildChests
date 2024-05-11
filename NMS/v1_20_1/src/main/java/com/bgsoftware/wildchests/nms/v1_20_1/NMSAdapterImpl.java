@@ -1,6 +1,7 @@
-package com.bgsoftware.wildchests.nms.v1_19;
+package com.bgsoftware.wildchests.nms.v1_20_1;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
+import com.bgsoftware.wildchests.nms.NMSAdapter;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,9 +16,9 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
@@ -25,7 +26,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.util.Base64;
 
-public final class NMSAdapter implements com.bgsoftware.wildchests.nms.NMSAdapter {
+public final class NMSAdapterImpl implements NMSAdapter {
 
     private static void serialize(Inventory inventory, CompoundTag compoundTag) {
         ListTag itemsList = new ListTag();

@@ -3,9 +3,24 @@ package com.bgsoftware.wildchests.nms.v1_16_R3;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
-import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.*;
+import com.bgsoftware.wildchests.nms.NMSInventory;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.CraftWildInventory;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.TileEntityWildChest;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.WildContainerChest;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.WildContainerHopper;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.WildContainerItemImpl;
+import com.bgsoftware.wildchests.nms.v1_16_R3.inventory.WildInventory;
 import com.bgsoftware.wildchests.objects.chests.WChest;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.ChatComponentText;
+import net.minecraft.server.v1_16_R3.Container;
+import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.NBTTagByte;
+import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindow;
+import net.minecraft.server.v1_16_R3.PlayerInventory;
+import net.minecraft.server.v1_16_R3.TileEntity;
+import net.minecraft.server.v1_16_R3.World;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -14,15 +29,9 @@ import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 @SuppressWarnings({"unused", "ConstantConditions"})
-public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInventory {
+public final class NMSInventoryImpl implements NMSInventory {
 
     private static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
-
-    public static Container createContainer(int id, PlayerInventory playerInventory, com.bgsoftware.wildchests.objects.inventory.CraftWildInventory craftWildInventory) {
-        WildInventory inventory = ((CraftWildInventory) craftWildInventory).getInventory();
-        return inventory.getSize() == 5 ? WildContainerHopper.of(id, playerInventory, inventory) :
-                WildContainerChest.of(id, playerInventory, inventory);
-    }
 
     @Override
     public void updateTileEntity(Chest chest) {
@@ -97,6 +106,12 @@ public final class NMSInventory implements com.bgsoftware.wildchests.nms.NMSInve
         inventory.setItem(1, designItem, false);
         inventory.setItem(3, designItem, false);
         inventory.setItem(4, designItem, false);
+    }
+
+    public static Container createContainer(int id, PlayerInventory playerInventory, com.bgsoftware.wildchests.objects.inventory.CraftWildInventory craftWildInventory) {
+        WildInventory inventory = ((CraftWildInventory) craftWildInventory).getInventory();
+        return inventory.getSize() == 5 ? WildContainerHopper.of(id, playerInventory, inventory) :
+                WildContainerChest.of(id, playerInventory, inventory);
     }
 
 }

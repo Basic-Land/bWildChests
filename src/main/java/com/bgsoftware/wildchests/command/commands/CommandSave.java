@@ -6,7 +6,7 @@ import com.bgsoftware.wildchests.utils.Executor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class CommandSave implements ICommand {
@@ -51,6 +51,6 @@ public final class CommandSave implements ICommand {
 
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 }

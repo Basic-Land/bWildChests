@@ -14,7 +14,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public final class WChestData implements ChestData {
 
@@ -60,7 +65,7 @@ public final class WChestData implements ChestData {
         this.autoSuctionChunk = false;
         this.blacklisted = new KeySet();
         this.whitelisted = new KeySet();
-        this.particles = Collections.unmodifiableList(new ArrayList<>());
+        this.particles = Collections.emptyList();
     }
 
     @Override
@@ -88,18 +93,8 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setDefaultSize(int size) {
-        this.defaultSize = size;
-    }
-
-    @Override
     public String getDefaultTitle() {
         return defaultTitle;
-    }
-
-    @Override
-    public void setDefaultTitle(String title) {
-        this.defaultTitle = title;
     }
 
     @Override
@@ -115,35 +110,13 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setSellMode(boolean sellMode) {
-        this.sellMode = sellMode;
-    }
-
-    @Override
     public boolean isHopperFilter() {
         return hopperFilter;
     }
 
     @Override
-    public void setHopperFilter(boolean hopperFilter) {
-        this.hopperFilter = hopperFilter;
-    }
-
-    @Override
     public boolean isAutoCrafter() {
         return Iterators.size(getRecipes()) != 0;
-    }
-
-    @Override
-    public void setAutoCrafter(List<String> recipes) {
-        Iterator<Recipe> bukkitRecipes = Bukkit.recipeIterator();
-        KeySet recipesSet = new KeySet(recipes);
-
-        while (bukkitRecipes.hasNext()) {
-            Recipe recipe = bukkitRecipes.next();
-            if (recipesSet.contains(recipe.getResult()))
-                this.recipes.put(recipe, RecipeUtils.getIngredients(recipe));
-        }
     }
 
     @Override
@@ -175,18 +148,8 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setPagesData(Map<Integer, InventoryData> pagesData) {
-        this.pagesData = new HashMap<>(pagesData);
-    }
-
-    @Override
     public int getDefaultPagesAmount() {
         return defaultPagesAmount;
-    }
-
-    @Override
-    public void setDefaultPagesAmount(int defaultPagesAmount) {
-        this.defaultPagesAmount = defaultPagesAmount;
     }
 
     @Override
@@ -195,18 +158,8 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setMultiplier(double multiplier) {
-        this.multiplier = Math.max(0, multiplier);
-    }
-
-    @Override
     public boolean isAutoCollect() {
         return autoCollect;
-    }
-
-    @Override
-    public void setAutoCollect(boolean autoCollect) {
-        this.autoCollect = autoCollect;
     }
 
     @Override
@@ -220,18 +173,8 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setAutoSuctionRange(int autoSuctionRange) {
-        this.autoSuctionRange = Math.max(1, autoSuctionRange);
-    }
-
-    @Override
     public boolean isAutoSuctionChunk() {
         return autoSuctionChunk;
-    }
-
-    @Override
-    public void setAutoSuctionChunk(boolean autoSuctionChunk) {
-        this.autoSuctionChunk = autoSuctionChunk;
     }
 
     @Override
@@ -240,18 +183,8 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setDepositMethod(DepositMethod depositMethod) {
-        this.depositMethod = depositMethod;
-    }
-
-    @Override
     public Set<Key> getBlacklisted() {
         return blacklisted;
-    }
-
-    @Override
-    public void setBlacklisted(Set<Key> blacklisted) {
-        this.blacklisted.addAll(blacklisted);
     }
 
     @Override
@@ -260,16 +193,93 @@ public final class WChestData implements ChestData {
     }
 
     @Override
-    public void setWhitelisted(Set<Key> whitelisted) {
-        this.whitelisted.addAll(whitelisted);
-    }
-
-    @Override
     public BigInteger getStorageUnitMaxAmount() {
-        if (ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
+        if(ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
             throw new UnsupportedOperationException("Cannot get max amount of an unknown storage unit.");
 
         return maxAmount;
+    }
+
+    @Override
+    public List<String> getChestParticles() {
+        return particles;
+    }
+
+    @Override
+    public void setDefaultSize(int size) {
+        this.defaultSize = size;
+    }
+
+    @Override
+    public void setDefaultTitle(String title) {
+        this.defaultTitle = title;
+    }
+
+    @Override
+    public void setSellMode(boolean sellMode) {
+        this.sellMode = sellMode;
+    }
+
+    @Override
+    public void setDepositMethod(DepositMethod depositMethod) {
+        this.depositMethod = depositMethod;
+    }
+
+    @Override
+    public void setHopperFilter(boolean hopperFilter) {
+        this.hopperFilter = hopperFilter;
+    }
+
+    @Override
+    public void setAutoCrafter(List<String> recipes) {
+        Iterator<Recipe> bukkitRecipes = Bukkit.recipeIterator();
+        KeySet recipesSet = new KeySet(recipes);
+
+        while (bukkitRecipes.hasNext()) {
+            Recipe recipe = bukkitRecipes.next();
+            if (recipesSet.contains(recipe.getResult()))
+                this.recipes.put(recipe, RecipeUtils.getIngredients(recipe));
+        }
+    }
+
+    @Override
+    public void setPagesData(Map<Integer, InventoryData> pagesData) {
+        this.pagesData = new HashMap<>(pagesData);
+    }
+
+    @Override
+    public void setDefaultPagesAmount(int defaultPagesAmount) {
+        this.defaultPagesAmount = defaultPagesAmount;
+    }
+
+    @Override
+    public void setMultiplier(double multiplier) {
+        this.multiplier = Math.max(0, multiplier);
+    }
+
+    @Override
+    public void setAutoCollect(boolean autoCollect) {
+        this.autoCollect = autoCollect;
+    }
+
+    @Override
+    public void setAutoSuctionRange(int autoSuctionRange) {
+        this.autoSuctionRange = Math.max(1, autoSuctionRange);
+    }
+
+    @Override
+    public void setAutoSuctionChunk(boolean autoSuctionChunk) {
+        this.autoSuctionChunk = autoSuctionChunk;
+    }
+
+    @Override
+    public void setBlacklisted(Set<Key> blacklisted) {
+        this.blacklisted.addAll(blacklisted);
+    }
+
+    @Override
+    public void setWhitelisted(Set<Key> whitelisted) {
+        this.whitelisted.addAll(whitelisted);
     }
 
     @Override
@@ -278,11 +288,6 @@ public final class WChestData implements ChestData {
             throw new UnsupportedOperationException("Cannot set max amount of an unknown storage unit.");
 
         this.maxAmount = maxAmount;
-    }
-
-    @Override
-    public List<String> getChestParticles() {
-        return particles;
     }
 
     @Override

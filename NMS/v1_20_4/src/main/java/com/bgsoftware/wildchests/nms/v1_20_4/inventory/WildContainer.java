@@ -1,7 +1,7 @@
-package com.bgsoftware.wildchests.nms.v1_20_1.inventory;
+package com.bgsoftware.wildchests.nms.v1_20_4.inventory;
 
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
-import com.bgsoftware.wildchests.nms.v1_20_1.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_20_4.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.inventory.WildContainerItem;
 import net.minecraft.core.NonNullList;
@@ -9,12 +9,11 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -24,8 +23,9 @@ public class WildContainer implements Container {
     public final NonNullList<WildContainerItem> items;
     public final Chest chest;
     private final int index;
-    public BiConsumer<Integer, ItemStack> setItemFunction = null;
+
     private NonNullList<ItemStack> itemsAsNMSItemsView;
+    public BiConsumer<Integer, ItemStack> setItemFunction = null;
     private int maxStack = 64;
     private int nonEmptyItems = 0;
     private String title;
@@ -191,12 +191,12 @@ public class WildContainer implements Container {
         return nonEmptyItems <= 0;
     }
 
-    String getTitle() {
-        return title;
-    }
-
     void setTitle(String title) {
         this.title = title;
+    }
+
+    String getTitle() {
+        return title;
     }
 
     @Override

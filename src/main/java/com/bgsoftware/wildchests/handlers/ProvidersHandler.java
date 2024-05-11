@@ -26,7 +26,13 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
@@ -38,11 +44,14 @@ public final class ProvidersHandler implements ProvidersManager {
 
     private final Map<DepositMethod, BankProvider> bankProviderMap = new EnumMap<>(DepositMethod.class);
     private final Map<UUID, PendingTransaction> pendingTransactions = new HashMap<>();
-    private final List<IChestPlaceListener> chestPlaceListeners = new ArrayList<>();
-    private final List<IChestBreakListener> chestBreakListeners = new ArrayList<>();
-    private final boolean isShopsBridge = false;
+
     private PricesProvider pricesProvider = new PricesProvider_Default();
     private StackerProvider stackerProvider = new StackerProvider_Default();
+
+    private final List<IChestPlaceListener> chestPlaceListeners = new LinkedList<>();
+    private final List<IChestBreakListener> chestBreakListeners = new LinkedList<>();
+
+    private boolean isShopsBridge = false;
     private long lastBulkTransactionStart = -1;
 
     public ProvidersHandler(WildChestsPlugin plugin) {
@@ -288,16 +297,16 @@ public final class ProvidersHandler implements ProvidersManager {
             this.success = success;
         }
 
-        public static <T> TransactionResult<T> of(T data, Predicate<T> success) {
-            return new TransactionResult<>(data, success);
-        }
-
         public boolean isSuccess() {
             return success == null || success.test(data);
         }
 
         public T getData() {
             return data;
+        }
+
+        public static <T> TransactionResult<T> of(T data, Predicate<T> success) {
+            return new TransactionResult<>(data, success);
         }
 
     }

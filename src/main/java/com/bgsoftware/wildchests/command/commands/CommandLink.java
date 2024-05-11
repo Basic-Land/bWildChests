@@ -18,12 +18,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public final class CommandLink implements ICommand {
 
     private static final Set<Material> TRANSPARENT_TYPES = createTransparentTypes();
-    private final Map<UUID, Location> players = new HashMap<>();
 
     private static Set<Material> createTransparentTypes() {
         Set<Material> materialSet = EnumSet.noneOf(Material.class);
@@ -33,6 +39,8 @@ public final class CommandLink implements ICommand {
         }
         return materialSet;
     }
+
+    private final Map<UUID, Location> players = new HashMap<>();
 
     @Override
     public String getLabel() {
@@ -139,7 +147,7 @@ public final class CommandLink implements ICommand {
 
     @Override
     public List<String> tabComplete(WildChestsPlugin plugin, CommandSender sender, String[] args) {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
 }

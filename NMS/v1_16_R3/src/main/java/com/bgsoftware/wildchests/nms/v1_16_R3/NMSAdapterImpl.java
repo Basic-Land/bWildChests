@@ -1,6 +1,7 @@
 package com.bgsoftware.wildchests.nms.v1_16_R3;
 
 import com.bgsoftware.wildchests.api.objects.ChestType;
+import com.bgsoftware.wildchests.nms.NMSAdapter;
 import com.bgsoftware.wildchests.objects.inventory.InventoryHolder;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Location;
@@ -16,7 +17,7 @@ import java.math.BigInteger;
 import java.util.Base64;
 
 @SuppressWarnings({"unused", "ConstantConditions"})
-public final class NMSAdapter implements com.bgsoftware.wildchests.nms.NMSAdapter {
+public final class NMSAdapterImpl implements NMSAdapter {
 
     private static void serialize(Inventory inventory, NBTTagCompound tagCompound) {
         NBTTagList itemsList = new NBTTagList();

@@ -1,5 +1,5 @@
 plugins {
-    id("io.papermc.paperweight.userdev") version "1.5.11"
+    id("io.papermc.paperweight.userdev") version "1.6.0"
 }
 
 java {
@@ -8,7 +8,7 @@ java {
     }
 }
 
-group 'NMS:v1_19_4'
+group 'NMS:v1_19'
 
 dependencies {
     paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19.4-R0.1-SNAPSHOT")
