@@ -24,8 +24,9 @@ public class WildContainer implements Container {
     public final NonNullList<WildContainerItem> items;
     public final Chest chest;
     private final int index;
-    public BiConsumer<Integer, ItemStack> setItemFunction = null;
+
     private NonNullList<ItemStack> itemsAsNMSItemsView;
+    public BiConsumer<Integer, ItemStack> setItemFunction = null;
     private int maxStack = 64;
     private int nonEmptyItems = 0;
     private String title;
@@ -191,12 +192,12 @@ public class WildContainer implements Container {
         return nonEmptyItems <= 0;
     }
 
-    String getTitle() {
-        return title;
-    }
-
     void setTitle(String title) {
         this.title = title;
+    }
+
+    String getTitle() {
+        return title;
     }
 
     @Override

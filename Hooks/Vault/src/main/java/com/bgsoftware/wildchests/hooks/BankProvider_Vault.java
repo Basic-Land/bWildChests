@@ -19,7 +19,7 @@ public final class BankProvider_Vault implements BankProvider {
 
     @Override
     public boolean depositMoney(OfflinePlayer offlinePlayer, BigDecimal money) {
-        if (economy == null)
+        if(economy == null)
             return false;
 
         if (!economy.hasAccount(offlinePlayer))

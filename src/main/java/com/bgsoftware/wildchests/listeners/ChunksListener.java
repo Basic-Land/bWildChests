@@ -15,7 +15,7 @@ public final class ChunksListener implements Listener {
 
     private final WildChestsPlugin plugin;
 
-    public ChunksListener(WildChestsPlugin plugin){
+    public ChunksListener(WildChestsPlugin plugin) {
         this.plugin = plugin;
     }
 

@@ -18,13 +18,9 @@ You can find already compiled jars on our [Jenkins](https://hub.bg-software.com/
 
 ## API
 
-The plugin is packed with a rich API for interacting with chests and more. When hooking into the plugin, it's highly
-recommended to only use the API and not the compiled plugin, as the API methods are not only commented, but also will
-not get removed or changed unless they are marked as deprecated. This means that by using the API, you won't have to do
-any additional changes to your code between updates.
+The plugin is packed with a rich API for interacting with chests and more. When hooking into the plugin, it's highly recommended to only use the API and not the compiled plugin, as the API methods are not only commented, but also will not get removed or changed unless they are marked as deprecated. This means that by using the API, you won't have to do any additional changes to your code between updates.
 
 ##### Maven
-
 ```
 <repositories>
     <repository>
@@ -41,9 +37,7 @@ any additional changes to your code between updates.
     </dependency>
 </dependencies>
 ```
-
 ##### Gradle
-
 ```
 repositories {
     maven { url 'https://repo.bg-software.com/repository/api/' }
@@ -56,9 +50,9 @@ dependencies {
 
 ## Updates
 
-This plugin is provided "as is", which means no updates or new features are guaranteed. We will do our best to keep
+This plugin is provided "as is", which means no updates or new features are guaranteed. We will do our best to keep 
 updating and pushing new updates, and you are more than welcome to contribute your time as well and make pull requests
-for bug fixes.
+for bug fixes. 
 
 ## License
 

@@ -20,19 +20,14 @@ public final class SellChestTaskEvent extends Event implements Cancellable {
 
     /**
      * The constructor of the event.
-     *
-     * @param chest      The chest that sells the item.
-     * @param item       The item to be sold.
+     * @param chest The chest that sells the item.
+     * @param item The item to be sold.
      * @param multiplier The applied price multiplier.
      */
-    public SellChestTaskEvent(Chest chest, ItemStack item, double multiplier) {
+    public SellChestTaskEvent(Chest chest, ItemStack item, double multiplier){
         this.chest = chest;
         this.item = item;
         this.multiplier = multiplier;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     /**
@@ -58,7 +53,6 @@ public final class SellChestTaskEvent extends Event implements Cancellable {
 
     /**
      * Set a price multiplier.
-     *
      * @param multiplier The new price multiplier.
      */
     public void setMultiplier(double multiplier) {
@@ -77,6 +71,10 @@ public final class SellChestTaskEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 

@@ -10,22 +10,10 @@ public final class ChunkPosition {
     private final String world;
     private final int x, z;
 
-    private ChunkPosition(String world, int x, int z) {
+    private ChunkPosition(String world, int x, int z){
         this.world = world;
         this.x = x;
         this.z = z;
-    }
-
-    public static ChunkPosition of(Chunk chunk) {
-        return new ChunkPosition(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-    }
-
-    public static ChunkPosition of(Location location) {
-        return new ChunkPosition(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
-    }
-
-    public static ChunkPosition of(BlockPosition blockPosition) {
-        return new ChunkPosition(blockPosition.getWorldName(), blockPosition.getX() >> 4, blockPosition.getZ() >> 4);
     }
 
     public int getX() {
@@ -50,4 +38,17 @@ public final class ChunkPosition {
     public int hashCode() {
         return Objects.hash(world, x, z);
     }
+
+    public static ChunkPosition of(Chunk chunk){
+        return new ChunkPosition(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    public static ChunkPosition of(Location location){
+        return new ChunkPosition(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
+
+    public static ChunkPosition of(BlockPosition blockPosition){
+        return new ChunkPosition(blockPosition.getWorldName(), blockPosition.getX() >> 4, blockPosition.getZ() >> 4);
+    }
+
 }

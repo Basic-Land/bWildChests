@@ -10,12 +10,12 @@ import java.util.RandomAccess;
 
 public class TransformingNonNullList<T> extends NonNullList<T> {
 
-    private TransformingNonNullList(List<T> delegate, T initialElement) {
-        super(delegate, initialElement);
-    }
-
     public static <E, T> NonNullList<T> transform(List<E> delegate, T initialElement, Function<? super E, ? extends T> transformer) {
         return new TransformingNonNullList<>(Lists.transform(new RandomAccessNonNullList<>(delegate), transformer), initialElement);
+    }
+
+    private TransformingNonNullList(List<T> delegate, T initialElement) {
+        super(delegate, initialElement);
     }
 
     /* Patch for Lists#transform to detect NonNullList as a RandomAccess list */

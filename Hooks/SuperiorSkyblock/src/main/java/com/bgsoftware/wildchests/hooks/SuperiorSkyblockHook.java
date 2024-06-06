@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public final class SuperiorSkyblockHook {
 
-    public static void register(WildChestsPlugin plugin) {
+    public static void register(WildChestsPlugin plugin){
         SuperiorSkyblockAPI.getBlockValues().registerKeyParser(new CustomKeyParser() {
 
             @Override

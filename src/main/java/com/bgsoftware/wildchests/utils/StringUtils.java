@@ -9,6 +9,8 @@ import java.text.DecimalFormat;
 public final class StringUtils {
 
     private static final DecimalFormat numberFormatter = new DecimalFormat("###,###,###,###,###,###,###,###,###,##0.00");
+    private static final BigDecimal K = BigDecimal.valueOf(1000), M = K.multiply(K), B = M.multiply(K),
+            T = B.multiply(K), Q = T.multiply(K);
 
     public static String format(BigDecimal bigDecimal) {
         String s = numberFormatter.format(Double.parseDouble(bigDecimal.toString()));
@@ -45,9 +47,5 @@ public final class StringUtils {
 
         return String.join(" ", formattedWords);
     }
-
-    private static final BigDecimal K = BigDecimal.valueOf(1000), M = K.multiply(K), B = M.multiply(K),
-            T = B.multiply(K), Q = T.multiply(K);
-
 
 }

@@ -194,7 +194,7 @@ public final class WChestData implements ChestData {
 
     @Override
     public BigInteger getStorageUnitMaxAmount() {
-        if(ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
+        if (ChestType.valueOf(chestType) != ChestType.STORAGE_UNIT)
             throw new UnsupportedOperationException("Cannot get max amount of an unknown storage unit.");
 
         return maxAmount;

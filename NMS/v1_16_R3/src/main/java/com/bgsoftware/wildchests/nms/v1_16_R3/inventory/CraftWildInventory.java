@@ -39,13 +39,13 @@ public class CraftWildInventory extends CraftInventory implements com.bgsoftware
     }
 
     @Override
-    public String getTitle() {
-        return getInventory().getTitle();
+    public void setTitle(String title) {
+        getInventory().setTitle(title);
     }
 
     @Override
-    public void setTitle(String title) {
-        getInventory().setTitle(title);
+    public String getTitle() {
+        return getInventory().getTitle();
     }
 
     @Override

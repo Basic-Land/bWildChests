@@ -48,7 +48,7 @@ allprojects {
             file.text.contains('Bukkit.broadcastMessage')
         }.getFiles()
 
-        if (!filesWithDebug.isEmpty())
+        if(!filesWithDebug.isEmpty())
             throw new GradleException("Found debug messages: " + filesWithDebug)
     }
 
@@ -137,6 +137,7 @@ clean {
 build {
     dependsOn shadowJar
     dependsOn copyAPI
+    dependsOn clean
 }
 
 publish.shouldRunAfter shadowJar

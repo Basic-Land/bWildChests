@@ -16,59 +16,61 @@ public final class Executor {
 
     private static boolean shutdown = false;
 
-    public static void sync(Runnable runnable) {
-        if (shutdown)
+    public static void sync(Runnable runnable){
+        if(shutdown)
             return;
 
         sync(runnable, 0L);
     }
 
-    public static void sync(Runnable runnable, long delay) {
-        if (shutdown)
+    public static void sync(Runnable runnable, long delay){
+        if(shutdown)
             return;
 
         Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
     }
 
-    public static void async(Runnable runnable) {
-        if (shutdown)
+    public static void async(Runnable runnable){
+        if(shutdown)
             return;
 
-        if (Bukkit.isPrimaryThread()) {
+        if(Bukkit.isPrimaryThread()){
             Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
-        } else {
+        }
+        else{
             runnable.run();
         }
     }
 
-    public static void async(Runnable runnable, long delay) {
-        if (shutdown)
+    public static void async(Runnable runnable, long delay){
+        if(shutdown)
             return;
 
-        if (Bukkit.isPrimaryThread()) {
+        if(Bukkit.isPrimaryThread()){
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
-        } else {
+        }
+        else{
             runnable.run();
         }
     }
 
-    public static boolean isDataThread() {
+    public static boolean isDataThread(){
         return Thread.currentThread().getName().contains("WildChests Database Thread");
     }
 
-    public static void data(Runnable runnable) {
-        if (shutdown)
+    public static void data(Runnable runnable){
+        if(shutdown)
             return;
 
         databaseExecutor.execute(runnable);
     }
 
-    public static void stop() {
-        try {
+    public static void stop(){
+        try{
             shutdown = true;
             WildChestsPlugin.log("Shutting down database executor");
             shutdownAndAwaitTermination();
-        } catch (Exception ex) {
+        }catch(Exception ex){
             ex.printStackTrace();
         }
     }

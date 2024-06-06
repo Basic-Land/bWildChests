@@ -9,7 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public final class NotifierTask extends BukkitRunnable {
 
@@ -29,41 +33,6 @@ public final class NotifierTask extends BukkitRunnable {
         if (Bukkit.getScheduler().isCurrentlyRunning(taskID) || Bukkit.getScheduler().isQueued(taskID))
             Bukkit.getScheduler().cancelTask(taskID);
         new NotifierTask();
-    }
-
-    public static synchronized void addTransaction(UUID player, ItemStack itemStack, int amount, double amountEarned) {
-        Set<TransactionDetails> transactionDetails;
-
-        synchronized (transactions) {
-            transactionDetails = transactions.computeIfAbsent(player, p -> new HashSet<>());
-        }
-
-        for (TransactionDetails transaction : transactionDetails) {
-            if (transaction.getItemStack().isSimilar(itemStack)) {
-                transaction.increaseAmount(amount);
-                transaction.increaseEarnings(BigDecimal.valueOf(amountEarned));
-                return;
-            }
-        }
-
-        transactionDetails.add(new TransactionDetails(itemStack, amount, BigDecimal.valueOf(amountEarned)));
-    }
-
-    public static synchronized void addCrafting(UUID player, ItemStack itemStack, int amount) {
-        Set<CraftingDetails> craftingDetails;
-
-        synchronized (craftings) {
-            craftingDetails = craftings.computeIfAbsent(player, p -> new HashSet<>());
-        }
-
-        for (CraftingDetails crafting : craftingDetails) {
-            if (crafting.getItemStack().isSimilar(itemStack)) {
-                crafting.increaseAmount(amount);
-                return;
-            }
-        }
-
-        craftingDetails.add(new CraftingDetails(itemStack, amount));
     }
 
     @Override
@@ -116,6 +85,41 @@ public final class NotifierTask extends BukkitRunnable {
             });
             craftings.clear();
         }
+    }
+
+    public static synchronized void addTransaction(UUID player, ItemStack itemStack, int amount, double amountEarned) {
+        Set<TransactionDetails> transactionDetails;
+
+        synchronized (transactions) {
+            transactionDetails = transactions.computeIfAbsent(player, p -> new HashSet<>());
+        }
+
+        for (TransactionDetails transaction : transactionDetails) {
+            if (transaction.getItemStack().isSimilar(itemStack)) {
+                transaction.increaseAmount(amount);
+                transaction.increaseEarnings(BigDecimal.valueOf(amountEarned));
+                return;
+            }
+        }
+
+        transactionDetails.add(new TransactionDetails(itemStack, amount, BigDecimal.valueOf(amountEarned)));
+    }
+
+    public static synchronized void addCrafting(UUID player, ItemStack itemStack, int amount) {
+        Set<CraftingDetails> craftingDetails;
+
+        synchronized (craftings) {
+            craftingDetails = craftings.computeIfAbsent(player, p -> new HashSet<>());
+        }
+
+        for (CraftingDetails crafting : craftingDetails) {
+            if (crafting.getItemStack().isSimilar(itemStack)) {
+                crafting.increaseAmount(amount);
+                return;
+            }
+        }
+
+        craftingDetails.add(new CraftingDetails(itemStack, amount));
     }
 
 }

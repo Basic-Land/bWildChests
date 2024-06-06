@@ -18,10 +18,6 @@ public class WildContainerItemImpl implements WildContainerItem {
         this.craftItemStack = craftItemStack;
     }
 
-    public static ItemStack transform(WildContainerItem input) {
-        return ((WildContainerItemImpl) input).getHandle();
-    }
-
     @Override
     public CraftItemStack getBukkitItem() {
         return craftItemStack;
@@ -34,6 +30,10 @@ public class WildContainerItemImpl implements WildContainerItem {
     @Override
     public WildContainerItem copy() {
         return new WildContainerItemImpl(handle.copy());
+    }
+
+    public static ItemStack transform(WildContainerItem input) {
+        return ((WildContainerItemImpl) input).getHandle();
     }
 
 }

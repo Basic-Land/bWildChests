@@ -19,15 +19,20 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public final class WStorageChest extends WChest implements StorageChest {
 
     private static final int INVENTORY_SIZE = 5;
 
     private final CraftWildInventory inventory;
-    private final List<WildContainerItem> contents = new ArrayList<>(INVENTORY_SIZE);
+
     private BigInteger amount = BigInteger.ZERO, maxAmount;
+    private final List<WildContainerItem> contents = new ArrayList<>(INVENTORY_SIZE);
     private int maxStackSize = 64;
 
     private boolean broken = false;
@@ -37,7 +42,7 @@ public final class WStorageChest extends WChest implements StorageChest {
         super(placer, location, chestData);
         maxAmount = chestData.getStorageUnitMaxAmount();
         inventory = plugin.getNMSInventory().createInventory(this, INVENTORY_SIZE,
-                chestData.getTitle(1).replace("{0}", String.valueOf(amount)), 0);
+                chestData.getTitle(1).replace("{0}", amount + ""), 0);
 
         for (int i = 0; i < INVENTORY_SIZE; ++i)
             contents.add(WildContainerItem.AIR);
@@ -97,6 +102,11 @@ public final class WStorageChest extends WChest implements StorageChest {
     }
 
     @Override
+    public BigInteger getExactAmount() {
+        return getAmount();
+    }
+
+    @Override
     public void setAmount(BigInteger amount) {
         this.amount = amount.max(BigInteger.ZERO);
         if (amount.compareTo(BigInteger.ZERO) == 0) {
@@ -109,17 +119,12 @@ public final class WStorageChest extends WChest implements StorageChest {
             storageItem.setAmount(Math.min(maxStackSize, amount.intValue()));
         }
 
-        inventory.setTitle(getData().getTitle(1).replace("{0}", String.valueOf(amount)));
+        inventory.setTitle(getData().getTitle(1).replace("{0}", amount + ""));
     }
 
     @Override
     public void setAmount(int amount) {
         setAmount(BigInteger.valueOf(amount));
-    }
-
-    @Override
-    public BigInteger getExactAmount() {
-        return getAmount();
     }
 
     @Override

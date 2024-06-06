@@ -21,41 +21,15 @@ import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.math.BigInteger;
 import java.util.Base64;
 
 public final class NMSAdapterImpl implements NMSAdapter {
-
-    private static void serialize(Inventory inventory, CompoundTag compoundTag) {
-        ListTag itemsList = new ListTag();
-        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
-
-        for (int i = 0; i < items.length; ++i) {
-            if (items[i] != null) {
-                ItemStack itemStack = CraftItemStack.asNMSCopy(items[i]);
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                itemStack.save(itemTag);
-                itemsList.add(itemTag);
-            }
-        }
-
-        compoundTag.putInt("Size", inventory.getSize());
-        compoundTag.put("Items", itemsList);
-    }
-
-    private static InventoryHolder deserialize(CompoundTag compoundTag) {
-        InventoryHolder inventory = new InventoryHolder(compoundTag.getInt("Size"), "Chest");
-        ListTag itemsList = compoundTag.getList("Items", 10);
-
-        for (int i = 0; i < itemsList.size(); i++) {
-            CompoundTag itemTag = itemsList.getCompound(i);
-            inventory.setItem(itemTag.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.of(itemTag)));
-        }
-
-        return inventory;
-    }
 
     @Override
     public String serialize(org.bukkit.inventory.ItemStack bukkitItem) {
@@ -204,6 +178,36 @@ public final class NMSAdapterImpl implements NMSAdapter {
         CompoundTag compoundTag = itemStack.getOrCreateTag();
         compoundTag.putString(key, value);
         return CraftItemStack.asCraftMirror(itemStack);
+    }
+
+    private static void serialize(Inventory inventory, CompoundTag compoundTag) {
+        ListTag itemsList = new ListTag();
+        org.bukkit.inventory.ItemStack[] items = inventory.getContents();
+
+        for (int i = 0; i < items.length; ++i) {
+            if (items[i] != null) {
+                ItemStack itemStack = CraftItemStack.asNMSCopy(items[i]);
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putByte("Slot", (byte) i);
+                itemStack.save(itemTag);
+                itemsList.add(itemTag);
+            }
+        }
+
+        compoundTag.putInt("Size", inventory.getSize());
+        compoundTag.put("Items", itemsList);
+    }
+
+    private static InventoryHolder deserialize(CompoundTag compoundTag) {
+        InventoryHolder inventory = new InventoryHolder(compoundTag.getInt("Size"), "Chest");
+        ListTag itemsList = compoundTag.getList("Items", 10);
+
+        for (int i = 0; i < itemsList.size(); i++) {
+            CompoundTag itemTag = itemsList.getCompound(i);
+            inventory.setItem(itemTag.getByte("Slot"), CraftItemStack.asBukkitCopy(ItemStack.of(itemTag)));
+        }
+
+        return inventory;
     }
 
 }

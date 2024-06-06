@@ -15,9 +15,9 @@ public interface CraftWildInventory extends Inventory {
 
     List<WildContainerItem> getWildContents();
 
-    String getTitle();
-
     void setTitle(String title);
+
+    String getTitle();
 
     boolean isFull();
 

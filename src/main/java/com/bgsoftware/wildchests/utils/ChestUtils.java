@@ -16,14 +16,21 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiPredicate;
 
 public final class ChestUtils {
 
-    public static final short DEFAULT_COOLDOWN = 20;
     private static final int DEFAULT_MAX_STACK_SIZE = 64;
+
     private static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
+    public static final short DEFAULT_COOLDOWN = 20;
+
     public static final BiPredicate<Item, ChestData> SUCTION_PREDICATE = (item, chestData) -> {
         Key itemKey = item.getItemStack() == null ? Key.of("AIR:0") : Key.of(item.getItemStack());
         return !item.isDead() && !itemKey.toString().equals("AIR:0") &&

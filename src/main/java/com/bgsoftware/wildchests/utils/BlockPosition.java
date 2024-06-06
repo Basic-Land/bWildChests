@@ -11,13 +11,6 @@ public class BlockPosition {
     private final int y;
     private final int z;
 
-    public BlockPosition(String worldName, int x, int y, int z) {
-        this.worldName = worldName;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
     public static BlockPosition deserialize(String serialized) {
         String[] sections = serialized.split(", ");
         return new BlockPosition(sections[0], Integer.parseInt(sections[1]),
@@ -26,6 +19,13 @@ public class BlockPosition {
 
     public static BlockPosition of(Location location) {
         return new BlockPosition(location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    public BlockPosition(String worldName, int x, int y, int z) {
+        this.worldName = worldName;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public String getWorldName() {
