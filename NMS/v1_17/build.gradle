@@ -4,14 +4,14 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
 }
 
-group 'NMS:v1_19'
+group 'NMS:v1_17'
 
 dependencies {
-    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19.4-R0.1-SNAPSHOT")
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.17.1-R0.1-SNAPSHOT")
     compileOnly project(":API")
     compileOnly rootProject
 }
@@ -31,6 +31,6 @@ tasks {
     }
 }
 
-if (project.hasProperty('nms.compile_v1_19') && !Boolean.valueOf(project.findProperty("nms.compile_v1_19").toString())) {
+if (project.hasProperty('nms.compile_v1_17') && !Boolean.valueOf(project.findProperty("nms.compile_v1_17").toString())) {
     project.tasks.all { task -> task.enabled = false }
 }
