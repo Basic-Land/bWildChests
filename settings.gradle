@@ -1,8 +1,11 @@
 pluginManagement {
+    def paperWeightVersionLocal = System.getenv("USERDOMAIN_ROAMINGPROFILE") == "DESKTOP-KPL18HN" ? "1.7.2-SNAPSHOT" : "1.7.1"
     repositories {
-        gradlePluginPortal()
         mavenLocal()
-        maven { url "https://repo.papermc.io/repository/maven-public/" }
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'io.papermc.paperweight.userdev' version "${paperWeightVersionLocal}"
     }
 }
 
