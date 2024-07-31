@@ -1,10 +1,10 @@
-package com.bgsoftware.wildchests.nms.v1_20_2.inventory;
+package com.bgsoftware.wildchests.nms.v1_21.inventory;
 
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.HopperMenu;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.inventory.CraftInventoryView;
 
 public class WildHopperMenu extends HopperMenu {
 

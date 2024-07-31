@@ -217,35 +217,15 @@ public abstract class WChest extends DatabaseObject implements Chest {
 
     @Override
     public boolean onBreak(BlockBreakEvent event) {
-        Location loc = getLocation();
+        List<ItemStack> chestContents = new LinkedList<>();
         for (int page = 0; page < getPagesAmount(); page++) {
             Inventory inventory = getPage(page);
-            if (getData().isAutoCollect()) {
-                for (ItemStack itemStack : inventory.getContents())
-                    if (itemStack != null && itemStack.getType() != Material.AIR) {
-                        ItemUtils.dropOrCollect(event.getPlayer(), itemStack, true, loc);
-                    }
-            } else {
-                Map<ItemStack, Integer> items = new HashMap<>();
-                for (ItemStack itemStack : inventory.getContents())
-                    if (itemStack != null && itemStack.getType() != Material.AIR) {
-                        boolean in = false;
-                        for (Map.Entry<ItemStack, Integer> itemsIn : items.entrySet()) {
-                            if (itemsIn.getKey().isSimilar(itemStack)) {
-                                in = true;
-                                itemsIn.setValue(itemsIn.getValue() + itemStack.getAmount());
-                                break;
-                            }
-                        }
-                        if (!in) {
-                            items.put(itemStack, itemStack.getAmount());
-                        }
-                    }
-                for (Map.Entry<ItemStack, Integer> itemsIn : items.entrySet())
-                    WildChestsPlugin.getPlugin().getProviders().dropItem(loc, itemsIn.getKey(), itemsIn.getValue());
-                items.clear();
-            }
+            Collections.addAll(chestContents, inventory.getContents());
+            inventory.clear();
         }
+
+        ItemUtils.dropOrCollect(event.getPlayer(), chestContents, getData().isAutoCollect(),
+                getLocation(), false);
 
         return true;
     }

@@ -1,18 +1,19 @@
-package com.bgsoftware.wildchests.nms.v1_20_2.inventory;
+package com.bgsoftware.wildchests.nms.v1_21.inventory;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
-import com.bgsoftware.wildchests.nms.v1_20_2.NMSInventoryImpl;
-import com.bgsoftware.wildchests.nms.v1_20_2.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_21.NMSInventoryImpl;
+import com.bgsoftware.wildchests.nms.v1_21.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.chests.WStorageChest;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
 import com.bgsoftware.wildchests.utils.ChestUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -36,12 +37,12 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_20_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_20_R2.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.CraftParticle;
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.entity.CraftItem;
+import org.bukkit.craftbukkit.event.CraftEventFactory;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 
@@ -52,8 +53,8 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
 
     private static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
 
-    private static final ReflectMethod<Void> TILE_ENTITY_SAVE = new ReflectMethod<>(
-            BlockEntity.class, "b", CompoundTag.class);
+    private static final ReflectMethod<Void> BLOCK_ENTITY_SAVE_ADDITIONAL = new ReflectMethod<>(
+            BlockEntity.class, "b", CompoundTag.class, HolderLookup.Provider.class);
 
     private final ChestBlockEntity chestBlockEntity;
     private final Chest chest;
@@ -102,8 +103,8 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        TILE_ENTITY_SAVE.invoke(chestBlockEntity, compoundTag);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        BLOCK_ENTITY_SAVE_ADDITIONAL.invoke(this.chestBlockEntity, nbt, registryLookup);
     }
 
     @Override
@@ -219,6 +220,7 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
         if (autoSellMode) {
             ChestUtils.trySellChest(chest);
         }
+
     }
 
     @Override

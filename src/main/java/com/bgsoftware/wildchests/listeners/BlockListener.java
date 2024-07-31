@@ -104,7 +104,7 @@ public final class BlockListener implements Listener {
             ChestData chestData = chest.getData();
             ItemStack chestItem = chestData.getItemStack();
             Check.add(chestItem);
-            ItemUtils.dropOrCollect(e.getPlayer(), chestItem, chestData.isAutoCollect(), chest.getLocation());
+            ItemUtils.dropOrCollect(e.getPlayer(), chestItem, chestData.isAutoCollect(), chest.getLocation(), false);
         }
 
         chest.onBreak(e);
@@ -139,7 +139,8 @@ public final class BlockListener implements Listener {
             if (plugin.getSettings().explodeDropChance > 0 && (plugin.getSettings().explodeDropChance == 100 ||
                     ThreadLocalRandom.current().nextInt(101) <= plugin.getSettings().explodeDropChance)) {
                 ChestData chestData = chest.getData();
-                ItemUtils.dropOrCollect(null, chestData.getItemStack(), false, chest.getLocation());
+                ItemUtils.dropOrCollect(null, chestData.getItemStack(), false,
+                        chest.getLocation(), false);
             }
 
             chest.onBreak(new BlockBreakEvent(block, sourcePlayer));
