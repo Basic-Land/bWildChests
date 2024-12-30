@@ -4,7 +4,6 @@ gradle.properties
 
 # Ignore Gradle build output directory
 build
-archive
 
 # Ignore intellij files
 .idea
