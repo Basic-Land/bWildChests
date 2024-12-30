@@ -1,11 +1,11 @@
 plugins {
     id 'java'
-    id 'io.github.goooler.shadow' version '8.1.7'
+    id 'io.github.goooler.shadow' version '8.1.8'
     id 'maven-publish'
 }
 
 group 'WildChests'
-version = "2024.3"
+version = "2024.4"
 
 project.ext {
     archiveFolder = file("archive/")
@@ -76,9 +76,9 @@ dependencies {
     implementation 'com.bgsoftware.common.reflection:ReflectionUtils:b5'
     implementation 'com.bgsoftware.common.config:CommentedConfiguration:b1'
     implementation 'com.bgsoftware.common.updater:Updater:b1'
-    implementation 'com.bgsoftware.common.shopsbridge:ShopsBridge:b14:all@jar'
+    implementation 'com.bgsoftware.common.shopsbridge:ShopsBridge:b17:all@jar'
     implementation 'com.bgsoftware.common.dependencies:DependenciesManager:b2'
-    implementation 'com.bgsoftware.common.nmsloader:NMSLoader:b8'
+    implementation 'com.bgsoftware.common.nmsloader:NMSLoader:b9'
 
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 
