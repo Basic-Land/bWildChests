@@ -2,11 +2,7 @@ package com.bgsoftware.wildchests.command;
 
 import com.bgsoftware.wildchests.Locale;
 import com.bgsoftware.wildchests.WildChestsPlugin;
-import com.bgsoftware.wildchests.command.commands.CommandGive;
-import com.bgsoftware.wildchests.command.commands.CommandInfo;
-import com.bgsoftware.wildchests.command.commands.CommandLink;
-import com.bgsoftware.wildchests.command.commands.CommandReload;
-import com.bgsoftware.wildchests.command.commands.CommandSave;
+import com.bgsoftware.wildchests.command.commands.*;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -31,6 +27,7 @@ public final class CommandsHandler implements CommandExecutor, TabCompleter {
         registerCommand(new CommandLink());
         registerCommand(new CommandReload());
         registerCommand(new CommandSave());
+        registerCommand(new CommandSet());
     }
 
     @Override

@@ -1,5 +1,5 @@
 pluginManagement {
-    def paperWeightVersionLocal = System.getenv("USERDOMAIN_ROAMINGPROFILE") == "DESKTOP-KPL18HN" ? "2.0.0-SNAPSHOT" : "2.0.0-beta.14"
+    def paperWeightVersionLocal = System.getenv("USERDOMAIN_ROAMINGPROFILE") == "DESKTOP-KPL18HN" ? "2.0.0-SNAPSHOT" : "2.0.0-beta.17"
     repositories {
         mavenLocal()
         gradlePluginPortal()
@@ -20,10 +20,6 @@ include 'Hooks:SuperiorSkyblock'
 include 'Hooks:Vault'
 include 'Hooks:WildStacker'
 include 'NMS'
-include 'NMS:v1_20_3'
-include 'NMS:v1_20_4'
 include 'NMS:v1_21'
-include 'NMS:v1_21_3'
 include 'NMS:v1_21_4'
-include 'NMS:v1_21_5'
 include 'NMS:v1_21_7'
