@@ -1,21 +1,19 @@
-package com.bgsoftware.wildchests.nms.v1_21_4.inventory;
+package com.bgsoftware.wildchests.nms.v1_21_7.inventory;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
-import com.bgsoftware.wildchests.nms.v1_21_4.NMSInventoryImpl;
-import com.bgsoftware.wildchests.nms.v1_21_4.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_21_7.NMSInventoryImpl;
+import com.bgsoftware.wildchests.nms.v1_21_7.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.chests.WStorageChest;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
 import com.bgsoftware.wildchests.utils.ChestUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -34,6 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.CraftParticle;
@@ -54,7 +53,7 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
     private static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
 
     private static final ReflectMethod<Void> BLOCK_ENTITY_SAVE_ADDITIONAL = new ReflectMethod<>(
-            BlockEntity.class, "b", CompoundTag.class, HolderLookup.Provider.class);
+            BlockEntity.class, "a", ValueOutput.class);
 
     private final ChestBlockEntity chestBlockEntity;
     private final Chest chest;
@@ -103,8 +102,8 @@ public class WildChestBlockEntity extends ChestBlockEntity implements WorldlyCon
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        BLOCK_ENTITY_SAVE_ADDITIONAL.invoke(this.chestBlockEntity, nbt, registryLookup);
+    protected void saveAdditional(ValueOutput output) {
+        BLOCK_ENTITY_SAVE_ADDITIONAL.invoke(this.chestBlockEntity, output);
     }
 
     @Override

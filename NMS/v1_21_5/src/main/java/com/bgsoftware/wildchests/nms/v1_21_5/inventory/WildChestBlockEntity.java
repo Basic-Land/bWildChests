@@ -1,12 +1,12 @@
-package com.bgsoftware.wildchests.nms.v1_21_4.inventory;
+package com.bgsoftware.wildchests.nms.v1_21_5.inventory;
 
 import com.bgsoftware.common.reflection.ReflectMethod;
 import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.chests.StorageChest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
-import com.bgsoftware.wildchests.nms.v1_21_4.NMSInventoryImpl;
-import com.bgsoftware.wildchests.nms.v1_21_4.utils.TransformingNonNullList;
+import com.bgsoftware.wildchests.nms.v1_21_5.NMSInventoryImpl;
+import com.bgsoftware.wildchests.nms.v1_21_5.utils.TransformingNonNullList;
 import com.bgsoftware.wildchests.objects.chests.WChest;
 import com.bgsoftware.wildchests.objects.chests.WStorageChest;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;

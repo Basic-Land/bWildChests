@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,6 +31,9 @@ public final class BlockListener implements Listener {
 
     private final WildChestsPlugin plugin;
     private final BlockFace[] blockFaces = new BlockFace[]{BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH};
+
+    private static final EntityType WIND_CHARGE_TYPE = lookupEntityType("WIND_CHARGE");
+    private static final EntityType BREEZE_WIND_CHARGE_TYPE = lookupEntityType("BREEZE_WIND_CHARGE");
 
     public BlockListener(WildChestsPlugin plugin) {
         this.plugin = plugin;
@@ -120,6 +125,10 @@ public final class BlockListener implements Listener {
         if (e.blockList().isEmpty())
             return;
 
+        EntityType entityType = e.getEntityType();
+        if (entityType == WIND_CHARGE_TYPE || entityType == BREEZE_WIND_CHARGE_TYPE)
+            return;
+
         List<Block> blockList = new LinkedList<>(e.blockList());
 
         Player sourcePlayer = null;
@@ -149,6 +158,15 @@ public final class BlockListener implements Listener {
 
             chest.remove();
             block.setType(Material.AIR);
+        }
+    }
+
+    @Nullable
+    private static EntityType lookupEntityType(String name) {
+        try {
+            return EntityType.valueOf(name);
+        } catch (IllegalArgumentException error) {
+            return null;
         }
     }
 
