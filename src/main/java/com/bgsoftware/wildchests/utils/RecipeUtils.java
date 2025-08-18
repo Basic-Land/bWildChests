@@ -77,14 +77,11 @@ public final class RecipeUtils {
         return mergeIngredients(recipeIngredients);
     }
 
-    @SuppressWarnings("deprecation")
     private static List<RecipeIngredient> getIngredients(List<ItemStack> oldList) {
         ItemStackMap<Counter> counts = new ItemStackMap<>();
 
         for (ItemStack itemStack : oldList) {
             if (itemStack != null) {
-                if (itemStack.getData().getData() < 0)
-                    itemStack.setDurability((short) 0);
                 counts.computeIfAbsent(itemStack, k -> new Counter()).increase(itemStack.getAmount());
             }
         }

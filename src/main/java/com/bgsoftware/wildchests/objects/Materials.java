@@ -17,19 +17,19 @@ public enum Materials {
     private String legacyType;
     private byte legacyData;
 
-    private static boolean isLegacy = isLegacy();
+//    private static boolean isLegacy = isLegacy();
 
     public ItemStack toBukkitItem(){
-        return !isLegacy ? new ItemStack(Material.matchMaterial(name())) : new ItemStack(Material.matchMaterial(legacyType), 1, legacyData);
+        return new ItemStack(Material.matchMaterial(name()));
     }
-
-    private static boolean isLegacy(){
-        try{
-            Material.valueOf("STAINED_GLASS_PANE");
-            return true;
-        }catch(Throwable ignored){
-            return false;
-        }
-    }
+//
+//    private static boolean isLegacy(){
+//        try{
+//            Material.valueOf("STAINED_GLASS_PANE");
+//            return true;
+//        }catch(Throwable ignored){
+//            return false;
+//        }
+//    }
 
 }

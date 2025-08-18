@@ -34,6 +34,7 @@ public final class CommandLink implements ICommand {
     private static Set<Material> createTransparentTypes() {
         Set<Material> materialSet = EnumSet.noneOf(Material.class);
         for (Material material : Material.values()) {
+            if (material.isLegacy()) continue;
             if (material.isTransparent())
                 materialSet.add(material);
         }

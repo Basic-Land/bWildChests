@@ -83,7 +83,6 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 
     // Spigot jars
-    compileOnly "org.spigotmc:v1_8_R1:latest"
     compileOnly 'org.spigotmc:v1_16_R3-Tuinity:latest'
     compileOnly 'cz.basicland:bLibs:2.0.0-WIP-b49'
 }
@@ -105,6 +104,10 @@ processResources {
             }
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-Xlint:deprecation'
 }
 
 shadowJar {
