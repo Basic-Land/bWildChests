@@ -6,7 +6,6 @@ import com.bgsoftware.wildchests.api.objects.ChestType;
 import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.api.objects.data.InventoryData;
-import com.bgsoftware.wildchests.database.DatabaseObject;
 import com.bgsoftware.wildchests.handlers.ChestsHandler;
 import com.bgsoftware.wildchests.listeners.InventoryListener;
 import com.bgsoftware.wildchests.objects.containers.TileEntityContainer;
@@ -34,7 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public abstract class WChest extends DatabaseObject implements Chest {
+public abstract class WChest implements Chest {
 
     public static final Map<UUID, Chest> viewers = Maps.newHashMap();
     protected static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
