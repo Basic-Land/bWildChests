@@ -5,31 +5,11 @@ import org.bukkit.inventory.ItemStack;
 
 public enum Materials {
 
-    GREEN_STAINED_GLASS_PANE("STAINED_GLASS_PANE", 13),
-    RED_STAINED_GLASS_PANE("STAINED_GLASS_PANE", 14),
-    BLACK_STAINED_GLASS_PANE("STAINED_GLASS_PANE", 15);
-
-    Materials(String legacyType, int legacyData){
-        this.legacyType = legacyType;
-        this.legacyData = (byte) legacyData;
-    }
-
-    private String legacyType;
-    private byte legacyData;
-
-//    private static boolean isLegacy = isLegacy();
+    GREEN_STAINED_GLASS_PANE,
+    RED_STAINED_GLASS_PANE,
+    BLACK_STAINED_GLASS_PANE;
 
     public ItemStack toBukkitItem(){
         return new ItemStack(Material.matchMaterial(name()));
     }
-//
-//    private static boolean isLegacy(){
-//        try{
-//            Material.valueOf("STAINED_GLASS_PANE");
-//            return true;
-//        }catch(Throwable ignored){
-//            return false;
-//        }
-//    }
-
 }

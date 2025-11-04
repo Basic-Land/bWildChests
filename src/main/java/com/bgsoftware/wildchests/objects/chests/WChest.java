@@ -35,8 +35,8 @@ import java.util.stream.IntStream;
 
 public abstract class WChest implements Chest {
 
-    public static final Map<UUID, Chest> viewers = Maps.newHashMap();
     protected static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
+    public static final Map<UUID, Chest> viewers = Maps.newHashMap();
     public static Inventory guiConfirm;
 
     protected final UUID placer;
@@ -115,26 +115,28 @@ public abstract class WChest implements Chest {
 
     @Override
     public Map<Integer, ItemStack> addItems(ItemStack... itemStacks) {
-        Map<Integer, ItemStack> additionalItems = new HashMap<>();
-        Map<Integer, ItemStack> itemAdditionalItems = new HashMap<>();
+        if (itemStacks.length == 0)
+            return Collections.emptyMap();
 
-        for (ItemStack itemStack : itemStacks) {
-            if (itemStack != null) {
-                int currentInventory = 0;
+        Map<Integer, ItemStack> itemStackMap = new LinkedHashMap<>();
+        for (int i = 0; i < itemStacks.length; ++i)
+            itemStackMap.put(i, itemStacks[i]);
 
-                do {
-                    Inventory inventory = getPage(currentInventory);
-                    if (inventory != null) {
-                        itemAdditionalItems = inventory.addItem(itemStack);
-                    }
-                    currentInventory++;
-                } while (!itemAdditionalItems.isEmpty() && currentInventory < getPagesAmount());
-
-                additionalItems.putAll(itemAdditionalItems);
+        for (int i = 0; i < getPagesAmount(); ++i) {
+            Inventory page = getPage(i);
+            Iterator<ItemStack> itemStackIterator = itemStackMap.values().iterator();
+            while (itemStackIterator.hasNext()) {
+                ItemStack itemStack = itemStackIterator.next();
+                ItemStack leftOver = page.addItem(itemStack).get(0);
+                if (leftOver != null) {
+                    itemStack.setAmount(leftOver.getAmount());
+                } else {
+                    itemStackIterator.remove();
+                }
             }
         }
 
-        return additionalItems;
+        return itemStackMap;
     }
 
     @Override
