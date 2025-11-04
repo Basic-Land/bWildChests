@@ -1,10 +1,10 @@
-package com.bgsoftware.wildchests.nms.v1_21_7;
+package com.bgsoftware.wildchests.nms.v1_21_9;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
-public class NMSInventoryImpl extends com.bgsoftware.wildchests.nms.v1_21_7.AbstractNMSInventory {
+public class NMSInventoryImpl extends com.bgsoftware.wildchests.nms.v1_21_9.AbstractNMSInventory {
 
     @Override
     protected void setDesignItemTag(ItemStack itemStack) {

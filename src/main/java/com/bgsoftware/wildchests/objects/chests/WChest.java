@@ -38,7 +38,6 @@ public abstract class WChest implements Chest {
     public static final Map<UUID, Chest> viewers = Maps.newHashMap();
     protected static final WildChestsPlugin plugin = WildChestsPlugin.getPlugin();
     public static Inventory guiConfirm;
-    public static String guiConfirmTitle;
 
     protected final UUID placer;
     protected final BlockPosition blockPosition;
