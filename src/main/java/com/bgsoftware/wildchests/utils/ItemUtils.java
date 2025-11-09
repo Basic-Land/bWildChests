@@ -1,6 +1,8 @@
 package com.bgsoftware.wildchests.utils;
 
 import com.bgsoftware.wildchests.WildChestsPlugin;
+import cz.basicland.blibs.spigot.hooks.Check;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,6 +24,12 @@ public final class ItemUtils {
         HashMap<Integer, ItemStack> additionalItems = inventory.addItem(itemStack);
         if (location != null && !additionalItems.isEmpty()) {
             dropItems(location, additionalItems.values(), false);
+        }
+    }
+
+    public static void addId(ItemStack item) {
+        if (Bukkit.getPluginManager().isPluginEnabled("bLibs")) {
+            Check.add(item);
         }
     }
 

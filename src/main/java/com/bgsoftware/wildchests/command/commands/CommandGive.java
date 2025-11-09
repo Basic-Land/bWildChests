@@ -5,7 +5,6 @@ import com.bgsoftware.wildchests.WildChestsPlugin;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.command.ICommand;
 import com.bgsoftware.wildchests.utils.ItemUtils;
-import cz.basicland.blibs.spigot.hooks.Check;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -76,13 +75,13 @@ public final class CommandGive implements ICommand {
 
         int amount = chestItem.getAmount();
         if (amount == 1) {
-            Check.add(chestItem);
+            ItemUtils.addId(chestItem);
             ItemUtils.addItem(chestItem, target.getInventory(), target.getLocation());
         } else {
             while (amount > 0) {
                 ItemStack item = new ItemStack(chestItem);
                 item.setAmount(1);
-                Check.add(item);
+                ItemUtils.addId(item);
                 ItemUtils.addItem(item, target.getInventory(), target.getLocation());
                 amount--;
             }

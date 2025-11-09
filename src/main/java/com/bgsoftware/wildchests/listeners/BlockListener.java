@@ -6,6 +6,7 @@ import com.bgsoftware.wildchests.api.objects.chests.Chest;
 import com.bgsoftware.wildchests.api.objects.data.ChestData;
 import com.bgsoftware.wildchests.utils.ItemUtils;
 import cz.basicland.blibs.spigot.hooks.Check;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -82,7 +83,7 @@ public final class BlockListener implements Listener {
             return;
         }
 
-        if (Check.dupe(e.getItemInHand(), e.getPlayer(), false, true)) {
+        if (Bukkit.getPluginManager().isPluginEnabled("bLibs") && Check.dupe(e.getItemInHand(), e.getPlayer(), false, true)) {
             e.setCancelled(true);
             return;
         }
@@ -108,7 +109,7 @@ public final class BlockListener implements Listener {
         if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             ChestData chestData = chest.getData();
             ItemStack chestItem = chestData.getItemStack();
-            Check.add(chestItem);
+            ItemUtils.addId(chestItem);
             ItemUtils.dropOrCollect(e.getPlayer(), chestItem, chestData.isAutoCollect(), chest.getLocation(), false);
         }
 
