@@ -11,7 +11,7 @@ import java.util.Map;
 
 public final class Locale {
 
-    private static Map<String, Locale> localeMap = new HashMap<>();
+    private static final Map<String, Locale> localeMap = new HashMap<>();
 
     public static Locale SOLD_CHEST_HEADER = new Locale("SOLD_CHEST_HEADER");
     public static Locale SOLD_CHEST_LINE = new Locale("SOLD_CHEST_LINE");

@@ -8,6 +8,7 @@ group 'WildChests'
 version = "2025.2"
 
 project.ext {
+    archiveFolder = file("archive/")
     targetFolder = file("target/")
     buildVersion = System.getenv("BUILD_NUMBER") == null || Boolean.parseBoolean(System.getenv("STABLE_BUILD")) ?
             version : version + "-b" + System.getenv("BUILD_NUMBER")
